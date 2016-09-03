@@ -102,7 +102,7 @@ bintray {
     publications = ['MyPublication']
     publish = true
     pkg {
-        // repo = 'dev'
+        repo = 'dev'
         name = 'infinity-storage'
         version {
             name = project.version + '-' + System.getenv('TRAVIS_BUILD_NUMBER')
