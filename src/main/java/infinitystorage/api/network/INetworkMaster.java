@@ -1,6 +1,7 @@
 package infinitystorage.api.network;
 
 import cofh.api.energy.EnergyStorage;
+import infinitystorage.tile.TileNode;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -207,4 +208,35 @@ public interface INetworkMaster {
      * @return The world where this node is in
      */
     World getNetworkWorld();
+
+    /**
+     * @return Whether or not another machine can connect
+     */
+    boolean canConnect();
+
+    /**
+     * @param input The amount of connections to add
+     */
+    void addConnections(int input);
+
+    /**
+     * @param input The amount of connections to remove
+     */
+    void removeConnections(int input);
+
+    /**
+     * @param tile The tile entity to check
+     * @return Whether or not the tile entity is connected
+     */
+    boolean connected(TileNode tile);
+
+    /**
+     * @param node The tile node to add to the connection list
+     */
+    void addConnection(TileNode node);
+
+    /**
+     * @param node The tile node to remove from the connection list
+     */
+    void removeConnection(TileNode node);
 }

@@ -1,9 +1,11 @@
 package infinitystorage.tile;
 
 import infinitystorage.InfinityStorage;
+import infinitystorage.InfinityStorageBlocks;
 import infinitystorage.tile.data.ITileDataProducer;
 import infinitystorage.tile.data.InfinityStorageSerializers;
 import infinitystorage.tile.data.TileDataParameter;
+import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +33,7 @@ public class TileCraftingMonitor extends TileNode {
 
     public TileCraftingMonitor() {
         dataManager.addParameter(TASKS);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.CRAFTING_MONITOR), InfinityStorage.INSTANCE.craftingMonitorUsage);
     }
 
     @Override

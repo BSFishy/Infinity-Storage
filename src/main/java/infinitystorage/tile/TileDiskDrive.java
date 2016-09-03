@@ -1,5 +1,6 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -154,6 +155,7 @@ public class TileDiskDrive extends TileNode implements IItemStorageProvider, IFl
         dataManager.addWatchedParameter(COMPARE);
         dataManager.addWatchedParameter(MODE);
         dataManager.addWatchedParameter(TYPE);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.DISK_DRIVE), InfinityStorage.INSTANCE.diskDriveUsage);
     }
 
     @Override

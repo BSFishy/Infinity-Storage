@@ -1,5 +1,6 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -85,6 +86,7 @@ public class TileFluidInterface extends TileNode implements IComparable {
 
         tankOut.setCanDrain(true);
         tankOut.setCanFill(false);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.FLUID_INTERFACE), InfinityStorage.INSTANCE.fluidInterfaceUsage);
     }
 
     @Override

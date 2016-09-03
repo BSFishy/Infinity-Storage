@@ -1,5 +1,7 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import infinitystorage.InfinityStorage;
 import infinitystorage.tile.config.RedstoneMode;
@@ -9,6 +11,7 @@ public class TileRelay extends TileNode {
         setRedstoneMode(RedstoneMode.LOW);
 
         rebuildOnUpdateChange = true;
+        setupClientNode(new ItemStack(InfinityStorageBlocks.RELAY), InfinityStorage.INSTANCE.relayUsage);
     }
 
     @Override

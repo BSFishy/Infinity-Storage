@@ -1,5 +1,7 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -15,6 +17,12 @@ import infinitystorage.inventory.ItemHandlerUpgrade;
 import infinitystorage.item.ItemUpgrade;
 
 public class TileCrafter extends TileNode implements ICraftingPatternContainer {
+
+    public TileCrafter(){
+        super();
+        setupClientNode(new ItemStack(InfinityStorageBlocks.CRAFTER), InfinityStorage.INSTANCE.crafterUsage);
+    }
+
     private ItemHandlerBasic patterns = new ItemHandlerBasic(9, this, stack -> stack.getItem() instanceof ICraftingPatternProvider) {
         @Override
         protected void onContentsChanged(int slot) {

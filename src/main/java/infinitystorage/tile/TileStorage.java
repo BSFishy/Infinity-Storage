@@ -75,6 +75,8 @@ public class TileStorage extends TileNode implements IItemStorageProvider, IStor
         dataManager.addWatchedParameter(COMPARE);
         dataManager.addWatchedParameter(MODE);
         dataManager.addWatchedParameter(STORED);
+
+        setupClientNode(new ItemStack(InfinityStorageBlocks.STORAGE), InfinityStorage.INSTANCE.storageUsage);
     }
 
     @Override

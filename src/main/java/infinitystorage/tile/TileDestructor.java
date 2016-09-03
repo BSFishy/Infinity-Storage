@@ -1,5 +1,6 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
 import mcmultipart.microblock.IMicroblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -54,6 +55,7 @@ public class TileDestructor extends TileMultipartNode implements IComparable, IF
         dataManager.addWatchedParameter(COMPARE);
         dataManager.addWatchedParameter(MODE);
         dataManager.addWatchedParameter(TYPE);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.DESTRUCTOR), InfinityStorage.INSTANCE.destructorUsage);
     }
 
     @Override

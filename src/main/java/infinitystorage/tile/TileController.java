@@ -2,6 +2,7 @@ package infinitystorage.tile;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
+import infinitystorage.InfinityConfig;
 import net.darkhax.tesla.capability.TeslaCapabilities;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.items.ItemHandlerHelper;
 import infinitystorage.InfinityStorage;
 import infinitystorage.InfinityStorageBlocks;
@@ -136,6 +138,8 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     private static final String NBT_CRAFTING_TASK_TYPE = "Type";
     private static final String NBT_CRAFTING_TASK_CONTAINER = "Container";
 
+    public static int CONNECTIONS = 0;
+
     private static final Comparator<IItemStorage> ITEM_SIZE_COMPARATOR = (left, right) -> {
         if (left.getStored() == right.getStored()) {
             return 0;
@@ -198,6 +202,8 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     private EnumControllerType type;
 
     private RedstoneMode redstoneMode = RedstoneMode.IGNORE;
+
+    public static List<TileNode> CONNECTION = new ArrayList<>();
 
     public TileController() {
         dataManager.addWatchedParameter(REDSTONE_MODE);
@@ -706,6 +712,44 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     @Override
     public World getNetworkWorld() {
         return worldObj;
+    }
+
+    @Override
+    public boolean canConnect() {
+        if(CONNECTIONS < InfinityConfig.maxChannels){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    public void addConnections(int input) {
+        CONNECTIONS = ((CONNECTIONS + input > InfinityConfig.maxChannels) ? InfinityConfig.maxChannels : CONNECTIONS + input);
+
+        FMLLog.info("There are now " + CONNECTIONS + " connections");
+    }
+
+    @Override
+    public void removeConnections(int input) {
+        CONNECTIONS = ((CONNECTIONS - input < 0) ? 0 : CONNECTIONS - input);
+
+        FMLLog.info("There are now " + CONNECTIONS + " connections");
+    }
+
+    @Override
+    public boolean connected(TileNode tile) {
+        return (CONNECTION.contains(tile));
+    }
+
+    @Override
+    public void addConnection(TileNode node) {
+        CONNECTION.add(node);
+    }
+
+    @Override
+    public void removeConnection(TileNode node) {
+        CONNECTION.remove(CONNECTION.indexOf(node));
     }
 
     @Override

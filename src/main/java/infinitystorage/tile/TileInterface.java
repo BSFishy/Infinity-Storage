@@ -1,5 +1,6 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -31,6 +32,7 @@ public class TileInterface extends TileNode implements IComparable {
 
     public TileInterface() {
         dataManager.addWatchedParameter(COMPARE);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.INTERFACE), InfinityStorage.INSTANCE.interfaceUsage);
     }
 
     @Override

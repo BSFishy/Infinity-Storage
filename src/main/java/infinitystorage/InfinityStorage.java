@@ -96,9 +96,11 @@ public final class InfinityStorage {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) {
-        PROXY.preInit(e);
-
         Configuration config = new Configuration(e.getSuggestedConfigurationFile());
+
+        InfinityConfig.preInit(config);
+
+        PROXY.preInit(e);
 
         controllerBaseUsage = config.getInt("controllerBase", "energy", 0, 0, Integer.MAX_VALUE, "The base energy used by the Controller");
         cableUsage = config.getInt("cable", "energy", 0, 0, Integer.MAX_VALUE, "The energy used by Cables");

@@ -1,5 +1,6 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
 import mcmultipart.microblock.IMicroblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -55,6 +56,7 @@ public class TileConstructor extends TileMultipartNode implements IComparable, I
     public TileConstructor() {
         dataManager.addWatchedParameter(COMPARE);
         dataManager.addWatchedParameter(TYPE);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.CONSTRUCTOR), InfinityStorage.INSTANCE.constructorUsage);
     }
 
     @Override

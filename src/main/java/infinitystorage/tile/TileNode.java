@@ -1,5 +1,7 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityConfig;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -10,6 +12,7 @@ import infinitystorage.api.network.NetworkUtils;
 import infinitystorage.tile.config.IRedstoneConfigurable;
 import infinitystorage.tile.config.RedstoneMode;
 import infinitystorage.tile.data.TileDataParameter;
+import net.minecraftforge.fml.common.FMLLog;
 
 public abstract class TileNode extends TileBase implements INetworkNode, IRedstoneConfigurable {
     public static final TileDataParameter<Integer> REDSTONE_MODE = RedstoneMode.createParameter();
@@ -24,6 +27,8 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
     protected INetworkMaster network;
 
     protected boolean rebuildOnUpdateChange;
+
+    public ClientNode clientNode;
 
     public TileNode() {
         dataManager.addWatchedParameter(REDSTONE_MODE);
@@ -67,23 +72,55 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
 
     @Override
     public void onConnected(INetworkMaster network) {
-        this.connected = true;
-        this.network = network;
+        FMLLog.info("onConnected called");
+        if(InfinityConfig.channelsEnabled && !(this instanceof TileCable)){
+            if(network.canConnect()){
+                this.connected = true;
+                this.network = network;
 
-        onConnectionChange(network, true);
+                changeConnections(network, true);
+                onConnectionChange(network, true);
+            }
+        }else {
+            this.connected = true;
+            this.network = network;
+
+            onConnectionChange(network, true);
+        }
     }
 
     @Override
     public void onDisconnected(INetworkMaster network) {
-        onConnectionChange(network, false);
+        FMLLog.info("onDisconnected called");
+        if(InfinityConfig.channelsEnabled && !(this instanceof TileCable)){
+            if(network.connected(this)){
+                changeConnections(network, false);
+                onConnectionChange(network, false);
 
-        this.connected = false;
-        this.network = null;
+                this.connected = false;
+                this.network = null;
+            }
+        }else {
+            onConnectionChange(network, false);
+
+            this.connected = false;
+            this.network = null;
+        }
     }
 
     @Override
     public void onConnectionChange(INetworkMaster network, boolean state) {
         // NO OP
+    }
+
+    private void changeConnections(INetworkMaster network, boolean state) {
+        if(state) {
+            network.addConnections(1);
+            network.addConnection(this);
+        }else {
+            network.removeConnections(1);
+            network.removeConnection(this);
+        }
     }
 
     @Override
@@ -161,5 +198,13 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
 
     public boolean hasConnectivityState() {
         return false;
+    }
+
+    public void setupClientNode(ItemStack i, int e){
+        clientNode = new ClientNode(i, 1, e);
+    }
+
+    public void setupClientNode(ItemStack i, int a, int e){
+        clientNode = new ClientNode(i, a, e);
     }
 }

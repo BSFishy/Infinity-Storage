@@ -157,6 +157,7 @@ public class TileGrid extends TileNode implements IGrid {
         dataManager.addWatchedParameter(SORTING_DIRECTION);
         dataManager.addWatchedParameter(SORTING_TYPE);
         dataManager.addWatchedParameter(SEARCH_BOX_MODE);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.GRID), InfinityStorage.INSTANCE.gridUsage);
     }
 
     @Override

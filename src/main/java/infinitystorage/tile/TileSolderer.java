@@ -1,5 +1,7 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
@@ -49,6 +51,7 @@ public class TileSolderer extends TileNode {
     public TileSolderer() {
         dataManager.addWatchedParameter(DURATION);
         dataManager.addWatchedParameter(PROGRESS);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.SOLDERER), InfinityStorage.INSTANCE.soldererUsage);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package infinitystorage.tile;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraftforge.fluids.FluidStack;
@@ -75,6 +76,7 @@ public class TileFluidStorage extends TileNode implements IFluidStorageProvider,
         dataManager.addWatchedParameter(COMPARE);
         dataManager.addWatchedParameter(MODE);
         dataManager.addWatchedParameter(STORED);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.FLUID_STORAGE), InfinityStorage.INSTANCE.fluidStorageUsage);
     }
 
     @Override

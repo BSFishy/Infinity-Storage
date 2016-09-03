@@ -1,5 +1,6 @@
 package infinitystorage.gui;
 
+import infinitystorage.tile.TileNode;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import infinitystorage.container.ContainerController;

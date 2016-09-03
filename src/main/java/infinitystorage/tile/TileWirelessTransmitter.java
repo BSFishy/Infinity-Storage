@@ -1,5 +1,7 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
@@ -27,6 +29,7 @@ public class TileWirelessTransmitter extends TileNode implements IWirelessTransm
 
     public TileWirelessTransmitter() {
         dataManager.addWatchedParameter(RANGE);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.WIRELESS_TRANSMITTER), InfinityStorage.INSTANCE.wirelessTransmitterUsage);
     }
 
     @Override

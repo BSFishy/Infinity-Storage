@@ -1,5 +1,6 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataSerializers;
@@ -79,6 +80,8 @@ public class TileNetworkTransmitter extends TileNode {
         dataManager.addWatchedParameter(RECEIVER_DIMENSION_SUPPORTED);
 
         rebuildOnUpdateChange = true;
+
+        setupClientNode(new ItemStack(InfinityStorageBlocks.NETWORK_TRANSMITTER), InfinityStorage.INSTANCE.networkTransmitterUsage);
     }
 
     @Override

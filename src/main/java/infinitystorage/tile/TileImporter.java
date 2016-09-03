@@ -1,5 +1,6 @@
 package infinitystorage.tile;
 
+import infinitystorage.InfinityStorageBlocks;
 import mcmultipart.microblock.IMicroblock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,6 +45,7 @@ public class TileImporter extends TileMultipartNode implements IComparable, IFil
         dataManager.addWatchedParameter(COMPARE);
         dataManager.addWatchedParameter(MODE);
         dataManager.addWatchedParameter(TYPE);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.IMPORTER), InfinityStorage.INSTANCE.importerUsage);
     }
 
     @Override

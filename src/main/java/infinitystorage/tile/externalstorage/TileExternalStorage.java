@@ -2,7 +2,9 @@ package infinitystorage.tile.externalstorage;
 
 import com.jaquadro.minecraft.storagedrawers.api.storage.IDrawer;
 import com.jaquadro.minecraft.storagedrawers.api.storage.IDrawerGroup;
+import infinitystorage.InfinityStorageBlocks;
 import mcmultipart.microblock.IMicroblock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.tileentity.TileEntity;
@@ -95,6 +97,7 @@ public class TileExternalStorage extends TileMultipartNode implements IItemStora
         dataManager.addWatchedParameter(STORED);
         dataManager.addWatchedParameter(CAPACITY);
         dataManager.addWatchedParameter(TYPE);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.EXTERNAL_STORAGE), InfinityStorage.INSTANCE.externalStorageUsage);
     }
 
     @Override

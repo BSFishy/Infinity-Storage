@@ -92,6 +92,7 @@ public class TileDetector extends TileNode implements IComparable, IType {
         dataManager.addWatchedParameter(TYPE);
         dataManager.addWatchedParameter(MODE);
         dataManager.addWatchedParameter(AMOUNT);
+        setupClientNode(new ItemStack(InfinityStorageBlocks.DETECTOR), InfinityStorage.INSTANCE.detectorUsage);
     }
 
     @Override
