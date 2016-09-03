@@ -1,0 +1,81 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "orientable",
+    "textures": {
+      "side": "infinitystorage:blocks/side",
+      "top": "infinitystorage:blocks/side",
+      "front": "infinitystorage:blocks/disk_drive_0"
+    }
+  },
+  "variants": {
+    "inventory": [
+      {
+        "transform": "forge:default-block",
+        "y": 0
+      }
+    ],
+    "stored": {
+      "0": {
+        "textures": {
+          "front": "infinitystorage:blocks/disk_drive_0"
+        }
+      },
+      "1": {
+        "textures": {
+          "front": "infinitystorage:blocks/disk_drive_1"
+        }
+      },
+      "2": {
+        "textures": {
+          "front": "infinitystorage:blocks/disk_drive_2"
+        }
+      },
+      "3": {
+        "textures": {
+          "front": "infinitystorage:blocks/disk_drive_3"
+        }
+      },
+      "4": {
+        "textures": {
+          "front": "infinitystorage:blocks/disk_drive_4"
+        }
+      },
+      "5": {
+        "textures": {
+          "front": "infinitystorage:blocks/disk_drive_5"
+        }
+      },
+      "6": {
+        "textures": {
+          "front": "infinitystorage:blocks/disk_drive_6"
+        }
+      },
+      "7": {
+        "textures": {
+          "front": "infinitystorage:blocks/disk_drive_7"
+        }
+      }
+    },
+    "direction": {
+      "north": {
+        "y": 0
+      },
+      "east": {
+        "y": 90
+      },
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      },
+      "up": {
+        "x": 270
+      },
+      "down": {
+        "x": 90
+      }
+    }
+  }
+}

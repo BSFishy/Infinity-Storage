@@ -1,0 +1,83 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "all": "infinitystorage:blocks/cable",
+      "particle": "infinitystorage:blocks/cable",
+      "front": "infinitystorage:blocks/constructor",
+      "line": "infinitystorage:blocks/cable_part"
+    },
+    "model": "infinitystorage:cable_core",
+    "uvlock": true
+  },
+  "variants": {
+    "inventory": [
+      {
+        "model": "infinitystorage:constructor_destructor",
+        "transform": "forge:default-block"
+      }
+    ],
+    "direction": {
+      "north": {
+        "submodel": "infinitystorage:constructor_destructor_north"
+      },
+      "east": {
+        "submodel": "infinitystorage:constructor_destructor_east"
+      },
+      "south": {
+        "submodel": "infinitystorage:constructor_destructor_south"
+      },
+      "west": {
+        "submodel": "infinitystorage:constructor_destructor_west"
+      },
+      "up": {
+        "submodel": "infinitystorage:constructor_destructor_up"
+      },
+      "down": {
+        "submodel": "infinitystorage:constructor_destructor_down"
+      }
+    },
+    "north": {
+      "true": {
+        "submodel": "infinitystorage:cable_north"
+      },
+      "false": {
+      }
+    },
+    "east": {
+      "true": {
+        "submodel": "infinitystorage:cable_east"
+      },
+      "false": {
+      }
+    },
+    "south": {
+      "true": {
+        "submodel": "infinitystorage:cable_south"
+      },
+      "false": {
+      }
+    },
+    "west": {
+      "true": {
+        "submodel": "infinitystorage:cable_west"
+      },
+      "false": {
+      }
+    },
+    "up": {
+      "true": {
+        "submodel": "infinitystorage:cable_up"
+      },
+      "false": {
+      }
+    },
+    "down": {
+      "true": {
+        "submodel": "infinitystorage:cable_down"
+      },
+      "false": {
+      }
+    }
+  }
+}

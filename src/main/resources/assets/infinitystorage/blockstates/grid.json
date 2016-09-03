@@ -1,0 +1,77 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "orientable",
+    "textures": {
+      "side": "infinitystorage:blocks/side",
+      "top": "infinitystorage:blocks/side",
+      "front": "infinitystorage:blocks/grid_disconnected"
+    }
+  },
+  "variants": {
+    "inventory": [
+      {
+        "transform": "forge:default-block",
+        "y": 0
+      }
+    ],
+    "connected": {
+      "true": {
+        "textures": {
+          "front_fluid_grid": "infinitystorage:blocks/fluid_grid_connected",
+          "front_other": "infinitystorage:blocks/grid_connected"
+        }
+      },
+      "false": {
+        "textures": {
+          "front_fluid_grid": "infinitystorage:blocks/fluid_grid_disconnected",
+          "front_other": "infinitystorage:blocks/grid_disconnected"
+        }
+      }
+    },
+    "type": {
+      "normal": {
+        "textures": {
+          "front": "#front_other"
+        }
+      },
+      "crafting": {
+        "textures": {
+          "front": "#front_other"
+        }
+      },
+      "pattern": {
+        "textures": {
+          "front": "#front_other"
+        }
+      },
+      "fluid": {
+        "textures": {
+          "front": "#front_fluid_grid",
+          "side": "infinitystorage:blocks/fluid_grid_side",
+          "top": "infinitystorage:blocks/fluid_grid_side"
+        }
+      }
+    },
+    "direction": {
+      "north": {
+        "y": 0
+      },
+      "east": {
+        "y": 90
+      },
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      },
+      "up": {
+        "x": 270
+      },
+      "down": {
+        "x": 90
+      }
+    }
+  }
+}

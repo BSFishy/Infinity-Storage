@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all",
+    "textures": {
+      "all": "infinitystorage:blocks/interface_disconnected"
+    }
+  },
+  "variants": {
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "connected": {
+      "true": {
+        "textures": {
+          "all": "infinitystorage:blocks/interface_connected"
+        }
+      },
+      "false": {
+      }
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "orientable",
+    "textures": {
+      "side": "infinitystorage:blocks/side",
+      "top": "infinitystorage:blocks/side",
+      "front": "infinitystorage:blocks/controller_0"
+    }
+  },
+  "variants": {
+    "inventory": [
+      {
+        "y": 0,
+        "transform": "forge:default-block"
+      }
+    ],
+    "energy": {
+      "0": {
+        "textures": {
+          "front": "infinitystorage:blocks/controller_0"
+        }
+      },
+      "1": {
+        "textures": {
+          "front": "infinitystorage:blocks/controller_1"
+        }
+      },
+      "2": {
+        "textures": {
+          "front": "infinitystorage:blocks/controller_2"
+        }
+      },
+      "3": {
+        "textures": {
+          "front": "infinitystorage:blocks/controller_3"
+        }
+      },
+      "4": {
+        "textures": {
+          "front": "infinitystorage:blocks/controller_4"
+        }
+      },
+      "5": {
+        "textures": {
+          "front": "infinitystorage:blocks/controller_5"
+        }
+      },
+      "6": {
+        "textures": {
+          "front": "infinitystorage:blocks/controller_6"
+        }
+      },
+      "7": {
+        "textures": {
+          "front": "infinitystorage:blocks/controller_7"
+        }
+      }
+    },
+    "type": {
+      "normal": {
+      },
+      "creative": {
+      }
+    },
+    "direction": {
+      "north": {
+        "y": 0
+      },
+      "east": {
+        "y": 90
+      },
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      },
+      "up": {
+        "x": 270
+      },
+      "down": {
+        "x": 90
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "particle": "infinitystorage:blocks/side_borderless",
+      "torch": "infinitystorage:blocks/wireless_transmitter_disconnected"
+    },
+    "model": "infinitystorage:detector"
+  },
+  "variants": {
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "powered": {
+      "true": {
+        "textures": {
+          "torch": "infinitystorage:blocks/wireless_transmitter_connected"
+        }
+      },
+      "false": {
+      }
+    }
+  }
+}
