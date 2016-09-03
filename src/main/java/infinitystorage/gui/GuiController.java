@@ -59,6 +59,7 @@ public class GuiController extends GuiBase {
         int y = 26;
 
         int slot = getScrollbar().getOffset() * 2;
+        int currentSlot = slot;
 
         RenderHelper.enableGUIStandardItemLighting();
 
@@ -69,40 +70,49 @@ public class GuiController extends GuiBase {
         for (int i = 0; i < 4; ++i) {
             if (slot < nodes.size()) {
                 ClientNode node = nodes.get(slot);
+                boolean draw = false;
 
-                drawItem(x, y + 5, node.getStack());
-
-                float scale = 0.5f;
-
-                GlStateManager.pushMatrix();
-                GlStateManager.scale(scale, scale, 1);
-
-                drawString(calculateOffsetOnScale(x + 1, scale), calculateOffsetOnScale(y - 2, scale), node.getStack().getDisplayName());
-                drawString(calculateOffsetOnScale(x + 21, scale), calculateOffsetOnScale(y + 10, scale), node.getAmount() + "x");
-
-                GlStateManager.popMatrix();
-
-                if (inBounds(x, y, 16, 16, mouseX, mouseY)) {
-                    nodeHovering = node;
+                for (TileNode tn : controller.CONNECTION) {
+                    if (tn.clientNode.equals(node) || tn.clientNode == node) {
+                        draw = true;
+                    }
                 }
+
+                if (draw) {
+                    drawItem(x, y + 5, node.getStack());
+
+                    float scale = 0.5f;
+
+                    GlStateManager.pushMatrix();
+                    GlStateManager.scale(scale, scale, 1);
+
+                    drawString(calculateOffsetOnScale(x + 1, scale), calculateOffsetOnScale(y - 2, scale), node.getStack().getDisplayName());
+                    drawString(calculateOffsetOnScale(x + 21, scale), calculateOffsetOnScale(y + 10, scale), node.getAmount() + "x");
+
+                    GlStateManager.popMatrix();
+
+                    if (inBounds(x, y, 16, 16, mouseX, mouseY)) {
+                        nodeHovering = node;
+                    }
+
+                    if (i == 1) {
+                        x = 33;
+                        y += 30;
+                    } else {
+                        x += 60;
+                    }
+                }
+
+                slot++;
             }
 
-            if (i == 1) {
-                x = 33;
-                y += 30;
-            } else {
-                x += 60;
+            if (nodeHovering != null) {
+                drawTooltip(mouseX, mouseY, t("misc.infinitystorage:energy_usage_minimal", nodeHovering.getEnergyUsage()));
             }
 
-            slot++;
-        }
-
-        if (nodeHovering != null) {
-            drawTooltip(mouseX, mouseY, t("misc.infinitystorage:energy_usage_minimal", nodeHovering.getEnergyUsage()));
-        }
-
-        if (inBounds(barX, barY, barWidth, barHeight, mouseX, mouseY)) {
-            drawTooltip(mouseX, mouseY, t("misc.infinitystorage:energy_usage", TileController.ENERGY_USAGE.getValue()) + "\n" + t("misc.infinitystorage:energy_stored", TileController.ENERGY_STORED.getValue(), TileController.ENERGY_CAPACITY.getValue()));
+            if (inBounds(barX, barY, barWidth, barHeight, mouseX, mouseY)) {
+                drawTooltip(mouseX, mouseY, t("misc.infinitystorage:energy_usage", TileController.ENERGY_USAGE.getValue()) + "\n" + t("misc.infinitystorage:energy_stored", TileController.ENERGY_STORED.getValue(), TileController.ENERGY_CAPACITY.getValue()));
+            }
         }
     }
 

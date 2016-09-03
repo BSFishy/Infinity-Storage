@@ -204,6 +204,7 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     private RedstoneMode redstoneMode = RedstoneMode.IGNORE;
 
     public static List<TileNode> CONNECTION = new ArrayList<>();
+    public static List<TileNode> TILE_NODES = new ArrayList<>();
 
     public TileController() {
         dataManager.addWatchedParameter(REDSTONE_MODE);
@@ -726,15 +727,11 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     @Override
     public void addConnections(int input) {
         CONNECTIONS = ((CONNECTIONS + input > InfinityConfig.maxChannels) ? InfinityConfig.maxChannels : CONNECTIONS + input);
-
-        FMLLog.info("There are now " + CONNECTIONS + " connections");
     }
 
     @Override
     public void removeConnections(int input) {
         CONNECTIONS = ((CONNECTIONS - input < 0) ? 0 : CONNECTIONS - input);
-
-        FMLLog.info("There are now " + CONNECTIONS + " connections");
     }
 
     @Override
@@ -750,6 +747,34 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     @Override
     public void removeConnection(TileNode node) {
         CONNECTION.remove(CONNECTION.indexOf(node));
+    }
+
+    @Override
+    public void addNodeToQueue(TileNode node, boolean add){
+        if(add){
+            TILE_NODES.add(node);
+        }else{
+            TILE_NODES.remove(TILE_NODES.indexOf(node));
+        }
+    }
+
+    @Override
+    public void connectQueue(){
+        if(!TILE_NODES.isEmpty() && CONNECTIONS < 8){
+            FMLLog.info("connectQueue called");
+            while(CONNECTIONS < 8){
+                for(TileNode node : TILE_NODES){
+                    node.onConnected(this);
+                    addNodeToQueue(node, false);
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean inQueue(TileNode node){
+        return TILE_NODES.contains(node);
     }
 
     @Override

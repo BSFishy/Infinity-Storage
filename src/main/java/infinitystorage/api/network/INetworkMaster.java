@@ -239,4 +239,20 @@ public interface INetworkMaster {
      * @param node The tile node to remove from the connection list
      */
     void removeConnection(TileNode node);
+
+    /**
+     * @param node The node to add to the queue
+     */
+    void addNodeToQueue(TileNode node, boolean add);
+
+    /**
+     * @param node The node to try and find
+     * @return Whether or not the node is in the queue
+     */
+    boolean inQueue(TileNode node);
+
+    /**
+     * If there are any nodes in the queue, start connecting them until there are no more channels
+     */
+    void connectQueue();
 }

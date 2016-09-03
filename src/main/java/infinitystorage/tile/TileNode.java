@@ -72,7 +72,6 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
 
     @Override
     public void onConnected(INetworkMaster network) {
-        FMLLog.info("onConnected called");
         if(InfinityConfig.channelsEnabled && !(this instanceof TileCable)){
             if(network.canConnect()){
                 this.connected = true;
@@ -80,6 +79,8 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
 
                 changeConnections(network, true);
                 onConnectionChange(network, true);
+            }else{
+                network.addNodeToQueue(this, true);
             }
         }else {
             this.connected = true;
@@ -96,6 +97,7 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
             if(network.connected(this)){
                 changeConnections(network, false);
                 onConnectionChange(network, false);
+                network.connectQueue();
 
                 this.connected = false;
                 this.network = null;
