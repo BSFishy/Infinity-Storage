@@ -6,4 +6,8 @@ script: "./gradlew build"
 after_success: "./gradlew bintrayUpload"
 
 notifications:
-  email: false
+  email:
+    recipients:
+      - lousylynx12@gmail.com
+    on_success: never
+    on_failure: always
