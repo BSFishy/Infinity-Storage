@@ -54,6 +54,8 @@ public class GuiController extends GuiBase {
     public void drawForeground(int mouseX, int mouseY) {
         drawString(7, 7, t("gui.infinitystorage:controller." + controller.getType().getId()));
         drawString(7, 87, t("container.inventory"));
+        controller.channelDataInit();
+        drawString(67, 87, t("gui.infinitystorage:controller.channels", controller.channelData.channelsUsed));
 
         int x = 33;
         int y = 26;

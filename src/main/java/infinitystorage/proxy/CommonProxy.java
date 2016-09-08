@@ -138,6 +138,7 @@ public class CommonProxy {
         registerItem(InfinityStorageItems.UPGRADE);
         registerItem(InfinityStorageItems.GRID_FILTER);
         registerItem(InfinityStorageItems.NETWORK_CARD);
+        registerItem(InfinityStorageItems.NETWORK_TOOL);
 
         OreDictionary.registerOre("itemSilicon", InfinityStorageItems.SILICON);
 
@@ -624,6 +625,13 @@ public class CommonProxy {
             'D', new ItemStack(InfinityStorageItems.CORE, 1, ItemCore.TYPE_DESTRUCTION),
             'A', new ItemStack(InfinityStorageItems.PROCESSOR, 1, ItemProcessor.TYPE_ADVANCED)
         );
+
+        // Network Tool
+        GameRegistry.addShapedRecipe(new ItemStack(InfinityStorageItems.NETWORK_TOOL),
+                "I I",
+                " I ",
+                " I ",
+                'I', new ItemStack(InfinityStorageItems.QUARTZ_ENRICHED_IRON));
     }
 
     public void init(FMLInitializationEvent e) {

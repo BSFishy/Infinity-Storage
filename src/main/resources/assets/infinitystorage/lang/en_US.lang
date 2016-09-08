@@ -2,6 +2,7 @@ itemGroup.infinitystorage=Infinity Storage
 
 gui.infinitystorage:controller.0=Controller
 gui.infinitystorage:controller.1=Creative Controller
+gui.infinitystorage:controller.channels=Channels used: %d
 gui.infinitystorage:grid=Grid
 gui.infinitystorage:grid.craft=Craft
 gui.infinitystorage:grid.pattern_create=Create Pattern
@@ -65,6 +66,8 @@ misc.infinitystorage:start=Start
 misc.infinitystorage:clear=Clear
 misc.infinitystorage:cancel_all=Cancel All
 misc.infinitystorage:priority=Priority
+
+misc.infinitystorage:network_tool.tooltip=This is used to reload the channels for a controller
 
 sidebutton.infinitystorage:compare.1=Compare Damage
 sidebutton.infinitystorage:compare.2=Compare NBT
@@ -182,3 +185,4 @@ item.infinitystorage:upgrade.5.name=Interdimensional Upgrade
 item.infinitystorage:storage_housing.name=Storage Housing
 item.infinitystorage:grid_filter.name=Grid Filter
 item.infinitystorage:network_card.name=Network Card
+item.infinitystorage:network_tool.name=Network Tool

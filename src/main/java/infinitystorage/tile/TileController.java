@@ -3,23 +3,6 @@ package infinitystorage.tile;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import infinitystorage.InfinityConfig;
-import net.darkhax.tesla.capability.TeslaCapabilities;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.items.ItemHandlerHelper;
 import infinitystorage.InfinityStorage;
 import infinitystorage.InfinityStorageBlocks;
 import infinitystorage.api.InfinityStorageAPI;
@@ -66,6 +49,22 @@ import infinitystorage.tile.data.TileDataParameter;
 import infinitystorage.tile.externalstorage.FluidStorageExternal;
 import infinitystorage.tile.externalstorage.ItemStorageExternal;
 import infinitystorage.tile.grid.IGrid;
+import net.darkhax.tesla.capability.TeslaCapabilities;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -205,6 +204,7 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
 
     public static List<TileNode> CONNECTION = new ArrayList<>();
     public static List<TileNode> TILE_NODES = new ArrayList<>();
+    public ChannelData channelData;
 
     public TileController() {
         dataManager.addWatchedParameter(REDSTONE_MODE);
@@ -716,12 +716,8 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     }
 
     @Override
-    public boolean canConnect() {
-        if(CONNECTIONS < InfinityConfig.maxChannels){
-            return true;
-        }else {
-            return false;
-        }
+    public boolean shouldConnect(int pipe) {
+        return channelData.shouldConnect(pipe);
     }
 
     @Override
@@ -761,7 +757,6 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     @Override
     public void connectQueue(){
         if(!TILE_NODES.isEmpty() && CONNECTIONS < 8){
-            FMLLog.info("connectQueue called");
             while(CONNECTIONS < 8){
                 for(TileNode node : TILE_NODES){
                     node.onConnected(this);
@@ -938,5 +933,23 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         return (energyTesla != null && (capability == TeslaCapabilities.CAPABILITY_HOLDER || capability == TeslaCapabilities.CAPABILITY_CONSUMER)) || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public void updateChannels(){
+        channelDataInit();
+        channelData.updateChannels();
+    }
+
+    public void channelDataInit(){
+        if(channelData == null){
+            channelData = new ChannelData(this);
+        }
+    }
+
+    @Override
+    public void reloadCables(){
+        channelDataInit();
+        channelData.reloadCables();
     }
 }

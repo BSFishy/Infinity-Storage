@@ -1,6 +1,7 @@
 package infinitystorage.tile;
 
 import infinitystorage.InfinityConfig;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -29,6 +30,8 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
     protected boolean rebuildOnUpdateChange;
 
     public ClientNode clientNode;
+
+    public Block block;
 
     public TileNode() {
         dataManager.addWatchedParameter(REDSTONE_MODE);
@@ -72,28 +75,23 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
 
     @Override
     public void onConnected(INetworkMaster network) {
-        if(InfinityConfig.channelsEnabled && !(this instanceof TileCable)){
-            if(network.canConnect()){
+        /*if(this instanceof TileCable){
+            network.reloadCables();
+        }else {
+            if (InfinityConfig.channelsEnabled) {
+            } else {
                 this.connected = true;
                 this.network = network;
 
-                changeConnections(network, true);
                 onConnectionChange(network, true);
-            }else{
-                network.addNodeToQueue(this, true);
             }
-        }else {
-            this.connected = true;
-            this.network = network;
-
-            onConnectionChange(network, true);
-        }
+        }*/
+        // DISABLED FOR NOW
     }
 
     @Override
     public void onDisconnected(INetworkMaster network) {
-        FMLLog.info("onDisconnected called");
-        if(InfinityConfig.channelsEnabled && !(this instanceof TileCable)){
+        /*if(InfinityConfig.channelsEnabled && !(this instanceof TileCable)){
             if(network.connected(this)){
                 changeConnections(network, false);
                 onConnectionChange(network, false);
@@ -107,7 +105,8 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
 
             this.connected = false;
             this.network = null;
-        }
+        }*/
+        // DISABLED FOR NOW
     }
 
     @Override
@@ -208,5 +207,11 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
 
     public void setupClientNode(ItemStack i, int a, int e){
         clientNode = new ClientNode(i, a, e);
+    }
+
+    public Block getBlock(){
+        if(block == null)
+            block = worldObj.getBlockState(pos).getBlock();
+        return block;
     }
 }
