@@ -34,8 +34,8 @@ public class ContainerFluidInterface extends ContainerBase {
                 if (!mergeItemStack(stack, 4 + 2, inventorySlots.size(), false)) {
                     return null;
                 }
-            } else if (!mergeItemStack(stack, 0, 4 + 2, false)) {
-                return null;
+            } else if (!mergeItemStack(stack, 0, 4 + 1, false)) {
+                return mergeItemStackToSpecimen(stack, 5, 6);
             }
 
             if (stack.stackSize == 0) {

@@ -7,8 +7,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import infinitystorage.api.autocrafting.ICraftingPattern;
 import infinitystorage.api.autocrafting.registry.ICraftingTaskFactory;
+import infinitystorage.api.autocrafting.task.CraftingTask;
 import infinitystorage.api.autocrafting.task.ICraftingTask;
-import infinitystorage.apiimpl.autocrafting.task.CraftingTask;
 import infinitystorage.apiimpl.autocrafting.task.CraftingTaskNormal;
 
 import javax.annotation.Nonnull;
@@ -26,10 +26,10 @@ public class CraftingTaskFactoryNormal implements ICraftingTaskFactory {
 
         if (tag != null) {
             task.setChildrenCreated(CraftingTask.readBooleanArray(tag, CraftingTask.NBT_CHILDREN_CREATED));
-            task.setSatisfied(CraftingTask.readBooleanArray(tag, CraftingTaskNormal.NBT_SATISFIED));
-            task.setChecked(CraftingTask.readBooleanArray(tag, CraftingTaskNormal.NBT_CHECKED));
+            task.setSatisfied(CraftingTask.readBooleanArray(tag, CraftingTask.NBT_SATISFIED));
+            task.setChecked(CraftingTask.readBooleanArray(tag, CraftingTask.NBT_CHECKED));
 
-            List<ItemStack> took = new ArrayList<ItemStack>();
+            List<ItemStack> took = new ArrayList<>();
 
             NBTTagList tookTag = tag.getTagList(CraftingTask.NBT_TOOK, Constants.NBT.TAG_COMPOUND);
 

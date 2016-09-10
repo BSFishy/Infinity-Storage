@@ -1,5 +1,7 @@
 package infinitystorage.api.network;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 /**
  * Represents the data handler for channels
  */
@@ -33,5 +35,5 @@ public interface IChannelData {
     /**
      * Reloads all of the data concerning the cables connected to the controller
      */
-    void reloadCables();
+    void reloadCables(EntityPlayer player);
 }

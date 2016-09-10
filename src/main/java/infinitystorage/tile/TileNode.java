@@ -4,6 +4,7 @@ import infinitystorage.InfinityConfig;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,10 +20,13 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
     public static final TileDataParameter<Integer> REDSTONE_MODE = RedstoneMode.createParameter();
 
     private static final String NBT_CONNECTED = "Connected";
+    private static final String NBT_NETWORK = "Network";
 
     private RedstoneMode redstoneMode = RedstoneMode.IGNORE;
     private boolean active;
     private boolean update;
+
+    private BlockPos networkPos;
 
     protected boolean connected;
     protected INetworkMaster network;
@@ -49,6 +53,17 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
     @Override
     public void update() {
         if (!worldObj.isRemote) {
+            if(networkPos != null){
+                TileEntity tile = worldObj.getTileEntity(networkPos);
+
+                if(tile instanceof INetworkMaster){
+                    ((INetworkMaster) tile).getNodeGraph().replace(this);
+
+                    onConnected((INetworkMaster) tile);
+                }
+
+                networkPos = null;
+            }
             if (update != canUpdate() && network != null) {
                 update = canUpdate();
 
@@ -87,6 +102,13 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
             }
         }*/
         // DISABLED FOR NOW
+
+        this.connected = true;
+        this.network = network;
+
+        onConnectionChange(network, true);
+
+        markDirty();
     }
 
     @Override
@@ -107,9 +129,15 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
             this.network = null;
         }*/
         // DISABLED FOR NOW
+
+        onConnectionChange(network, false);
+
+        this.connected = false;
+        this.network = null;
+
+        markDirty();
     }
 
-    @Override
     public void onConnectionChange(INetworkMaster network, boolean state) {
         // NO OP
     }
@@ -168,6 +196,10 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
         if (tag.hasKey(RedstoneMode.NBT)) {
             redstoneMode = RedstoneMode.getById(tag.getInteger(RedstoneMode.NBT));
         }
+
+        if(tag.hasKey(NBT_NETWORK)){
+            networkPos = BlockPos.fromLong(tag.getLong(NBT_NETWORK));
+        }
     }
 
     @Override
@@ -175,6 +207,10 @@ public abstract class TileNode extends TileBase implements INetworkNode, IRedsto
         super.write(tag);
 
         tag.setInteger(RedstoneMode.NBT, redstoneMode.ordinal());
+
+        if(network != null){
+            tag.setLong(NBT_NETWORK, network.getPosition().toLong());
+        }
 
         return tag;
     }

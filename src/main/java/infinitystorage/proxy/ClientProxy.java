@@ -1,5 +1,6 @@
 package infinitystorage.proxy;
 
+import infinitystorage.InfinityConfig;
 import mcmultipart.client.multipart.ModelMultipartContainer;
 import mcmultipart.raytrace.PartMOP;
 import mcmultipart.raytrace.RayTraceUtils;
@@ -236,6 +237,8 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.setCustomModelResourceLocation(InfinityStorageItems.STORAGE_HOUSING, 0, new ModelResourceLocation("infinitystorage:storage_housing", "inventory"));
         ModelLoader.setCustomModelResourceLocation(InfinityStorageItems.GRID_FILTER, 0, new ModelResourceLocation("infinitystorage:grid_filter", "inventory"));
         ModelLoader.setCustomModelResourceLocation(InfinityStorageItems.NETWORK_CARD, 0, new ModelResourceLocation("infinitystorage:network_card", "inventory"));
+        if(InfinityStorage.channelsEnabled)
+            ModelLoader.setCustomModelResourceLocation(InfinityStorageItems.NETWORK_TOOL, 0, new ModelResourceLocation("infinitystorage:network_tool", "inventory"));
 
         ModelLoader.setCustomModelResourceLocation(InfinityStorageItems.UPGRADE, 0, new ModelResourceLocation("infinitystorage:upgrade", "inventory"));
         ModelLoader.setCustomModelResourceLocation(InfinityStorageItems.UPGRADE, ItemUpgrade.TYPE_RANGE, new ModelResourceLocation("infinitystorage:range_upgrade", "inventory"));

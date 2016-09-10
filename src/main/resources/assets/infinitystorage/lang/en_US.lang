@@ -68,6 +68,8 @@ misc.infinitystorage:cancel_all=Cancel All
 misc.infinitystorage:priority=Priority
 
 misc.infinitystorage:network_tool.tooltip=This is used to reload the channels for a controller
+misc.infinitystorage:network_tool.success=Successfully reloaded all of the channels
+misc.infinitystorage:network_tool.error=There was an error reloading the channels
 
 sidebutton.infinitystorage:compare.1=Compare Damage
 sidebutton.infinitystorage:compare.2=Compare NBT

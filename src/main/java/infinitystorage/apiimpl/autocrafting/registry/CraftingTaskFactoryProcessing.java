@@ -8,7 +8,7 @@ import net.minecraftforge.common.util.Constants;
 import infinitystorage.api.autocrafting.ICraftingPattern;
 import infinitystorage.api.autocrafting.registry.ICraftingTaskFactory;
 import infinitystorage.api.autocrafting.task.ICraftingTask;
-import infinitystorage.apiimpl.autocrafting.task.CraftingTask;
+import infinitystorage.api.autocrafting.task.CraftingTask;
 import infinitystorage.apiimpl.autocrafting.task.CraftingTaskProcessing;
 
 import javax.annotation.Nonnull;

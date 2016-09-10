@@ -1,7 +1,7 @@
 package com.jaquadro.minecraft.storagedrawers.api;
 
 /**
- * Entry point for the public API.
+ * Entry point for the public IAPI.
  */
 public class StorageDrawersApi {
     private static IStorageDrawersApi instance;
@@ -9,9 +9,9 @@ public class StorageDrawersApi {
     public static final String VERSION = "1.7.10-1.2.0";
 
     /**
-     * API entry point.
+     * IAPI entry point.
      *
-     * @return The {@link IStorageDrawersApi} instance or null if the API or Storage Drawers is unavailable.
+     * @return The {@link IStorageDrawersApi} instance or null if the IAPI or Storage Drawers is unavailable.
      */
     public static IStorageDrawersApi instance() {
         if (instance == null) {

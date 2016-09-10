@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * The recipe registry of the solderer, access it via {@link infinitystorage.api.InfinityStorageAPI#SOLDERER_REGISTRY}.
+ * The recipe registry of the solderer
  */
 public interface ISoldererRegistry {
     /**

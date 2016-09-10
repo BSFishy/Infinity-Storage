@@ -113,6 +113,7 @@ public class BlockController extends BlockBase {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
         super.neighborChanged(state, world, pos, block);
 
@@ -134,16 +135,6 @@ public class BlockController extends BlockBase {
         drops.add(stack);
 
         return drops;
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride(IBlockState state) {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
-        return ((TileController) world.getTileEntity(pos)).getEnergyScaledForComparator();
     }
 
     @Override

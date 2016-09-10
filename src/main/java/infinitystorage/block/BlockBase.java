@@ -59,6 +59,7 @@ public abstract class BlockBase extends Block {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState();
     }
@@ -69,6 +70,7 @@ public abstract class BlockBase extends Block {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         if (getPlacementType() != null) {
             return state.withProperty(DIRECTION, ((TileBase) world.getTileEntity(pos)).getDirection());
@@ -116,7 +118,7 @@ public abstract class BlockBase extends Block {
 
     @Override
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        return willHarvest ? true : super.removedByPlayer(state, world, pos, player, willHarvest);
+        return willHarvest || super.removedByPlayer(state, world, pos, player, willHarvest);
     }
 
     @Override

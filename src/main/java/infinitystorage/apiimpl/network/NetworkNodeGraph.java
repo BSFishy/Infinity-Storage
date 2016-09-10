@@ -1,5 +1,10 @@
 package infinitystorage.apiimpl.network;
 
+import infinitystorage.InfinityConfig;
+import infinitystorage.InfinityStorage;
+import infinitystorage.api.autocrafting.ICraftingPatternContainer;
+import infinitystorage.api.storage.fluid.IFluidStorageProvider;
+import infinitystorage.api.storage.item.IItemStorageProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -104,27 +109,29 @@ public class NetworkNodeGraph implements INetworkNodeGraph {
             }
         }
 
+        List<INetworkNode> oldNodes = new ArrayList<>(nodes);
+
+        this.nodes = newNodes;
+
         boolean changed = false;
 
-        if (notify) {
-            for (INetworkNode newNode : newNodes) {
-                if (!nodes.contains(newNode)) {
-                    newNode.onConnected(controller);
+        if (notify && !InfinityStorage.channelsEnabled) {
+            for (INetworkNode node : nodes) {
+                if (!oldNodes.contains(node)) {
+                    node.onConnected(controller);
 
                     changed = true;
                 }
             }
 
-            for (INetworkNode oldNode : nodes) {
-                if (!newNodes.contains(oldNode)) {
+            for (INetworkNode oldNode : oldNodes) {
+                if (!nodes.contains(oldNode)) {
                     oldNode.onDisconnected(controller);
 
                     changed = true;
                 }
             }
         }
-
-        this.nodes = newNodes;
 
         if (changed) {
             controller.getDataManager().sendParameterToWatchers(TileController.NODES);
@@ -137,12 +144,30 @@ public class NetworkNodeGraph implements INetworkNodeGraph {
     }
 
     @Override
-    public void disconnectAll() {
-        for (INetworkNode node : nodes) {
-            if (node.isConnected()) {
-                node.onDisconnected(controller);
-            }
+    public void replace(INetworkNode node) {
+        nodes.remove(node);
+        nodes.add(node);
+
+        if(node instanceof ICraftingPatternContainer){
+            controller.rebuildPatterns();
         }
+
+        if(node instanceof IItemStorageProvider){
+            controller.getItemStorage().rebuild();
+        }
+
+        if(node instanceof IFluidStorageProvider){
+            controller.getFluidStorage().rebuild();
+        }
+
+        controller.getDataManager().sendParameterToWatchers(TileController.NODES);
+    }
+
+    @Override
+    public void disconnectAll() {
+        nodes.stream().filter(INetworkNode::isConnected).forEach(node -> {
+            node.onDisconnected(controller);
+        });
 
         nodes.clear();
 

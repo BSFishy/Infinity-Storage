@@ -7,11 +7,14 @@ import javax.annotation.Nonnull;
 
 public class RecipeHandlerSolderer implements IRecipeHandler<RecipeWrapperSolderer> {
     @Override
+    @Nonnull
     public Class<RecipeWrapperSolderer> getRecipeClass() {
         return RecipeWrapperSolderer.class;
     }
 
     @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
     public String getRecipeCategoryUid() {
         return RecipeCategorySolderer.ID;
     }
@@ -23,12 +26,13 @@ public class RecipeHandlerSolderer implements IRecipeHandler<RecipeWrapperSolder
     }
 
     @Override
+    @Nonnull
     public IRecipeWrapper getRecipeWrapper(RecipeWrapperSolderer recipe) {
         return recipe;
     }
 
     @Override
-    public boolean isRecipeValid(RecipeWrapperSolderer recipe) {
+    public boolean isRecipeValid(@Nonnull RecipeWrapperSolderer recipe) {
         return true;
     }
 }

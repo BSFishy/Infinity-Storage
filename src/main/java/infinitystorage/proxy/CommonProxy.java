@@ -1,5 +1,7 @@
 package infinitystorage.proxy;
 
+import infinitystorage.InfinityConfig;
+import infinitystorage.integration.ingameConfig.IngameConfigEventHandler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -46,11 +48,8 @@ public class CommonProxy {
             IntegrationCraftingTweaks.register();
         }
 
-        InfinityStorageAPI.SOLDERER_REGISTRY = new SoldererRegistry();
-
-        InfinityStorageAPI.CRAFTING_TASK_REGISTRY = new CraftingTaskRegistry();
-        InfinityStorageAPI.CRAFTING_TASK_REGISTRY.addFactory(CraftingTaskFactoryNormal.ID, new CraftingTaskFactoryNormal());
-        InfinityStorageAPI.CRAFTING_TASK_REGISTRY.addFactory(CraftingTaskFactoryProcessing.ID, new CraftingTaskFactoryProcessing());
+        InfinityStorageAPI.instance().getCraftingTaskRegistry().addFactory(CraftingTaskFactoryNormal.ID, new CraftingTaskFactoryNormal());
+        InfinityStorageAPI.instance().getCraftingTaskRegistry().addFactory(CraftingTaskFactoryProcessing.ID, new CraftingTaskFactoryProcessing());
 
         int id = 0;
 
@@ -138,19 +137,20 @@ public class CommonProxy {
         registerItem(InfinityStorageItems.UPGRADE);
         registerItem(InfinityStorageItems.GRID_FILTER);
         registerItem(InfinityStorageItems.NETWORK_CARD);
-        registerItem(InfinityStorageItems.NETWORK_TOOL);
+        if(InfinityStorage.channelsEnabled)
+            registerItem(InfinityStorageItems.NETWORK_TOOL);
 
         OreDictionary.registerOre("itemSilicon", InfinityStorageItems.SILICON);
 
         // Processors
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipePrintedProcessor(ItemProcessor.TYPE_PRINTED_BASIC));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipePrintedProcessor(ItemProcessor.TYPE_PRINTED_IMPROVED));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipePrintedProcessor(ItemProcessor.TYPE_PRINTED_ADVANCED));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipePrintedProcessor(ItemProcessor.TYPE_PRINTED_SILICON));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipePrintedProcessor(ItemProcessor.TYPE_PRINTED_BASIC));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipePrintedProcessor(ItemProcessor.TYPE_PRINTED_IMPROVED));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipePrintedProcessor(ItemProcessor.TYPE_PRINTED_ADVANCED));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipePrintedProcessor(ItemProcessor.TYPE_PRINTED_SILICON));
 
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeProcessor(ItemProcessor.TYPE_BASIC));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeProcessor(ItemProcessor.TYPE_IMPROVED));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeProcessor(ItemProcessor.TYPE_ADVANCED));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeProcessor(ItemProcessor.TYPE_BASIC));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeProcessor(ItemProcessor.TYPE_IMPROVED));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeProcessor(ItemProcessor.TYPE_ADVANCED));
 
         // Silicon
         GameRegistry.addSmelting(Items.QUARTZ, new ItemStack(InfinityStorageItems.SILICON), 0.5f);
@@ -211,7 +211,7 @@ public class CommonProxy {
         );
 
         // Disk Drive
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
             new ItemStack(InfinityStorageBlocks.DISK_DRIVE),
             500,
             new ItemStack(InfinityStorageItems.PROCESSOR, 1, ItemProcessor.TYPE_ADVANCED),
@@ -253,7 +253,7 @@ public class CommonProxy {
         );
 
         // Crafting Grid
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
             new ItemStack(InfinityStorageBlocks.GRID, 1, EnumGridType.CRAFTING.getId()),
             500,
             new ItemStack(InfinityStorageItems.PROCESSOR, 1, ItemProcessor.TYPE_ADVANCED),
@@ -262,7 +262,7 @@ public class CommonProxy {
         ));
 
         // Pattern Grid
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
             new ItemStack(InfinityStorageBlocks.GRID, 1, EnumGridType.PATTERN.getId()),
             500,
             new ItemStack(InfinityStorageItems.PROCESSOR, 1, ItemProcessor.TYPE_ADVANCED),
@@ -271,7 +271,7 @@ public class CommonProxy {
         ));
 
         // Fluid Grid
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
             new ItemStack(InfinityStorageBlocks.GRID, 1, EnumGridType.FLUID.getId()),
             500,
             new ItemStack(InfinityStorageItems.PROCESSOR, 1, ItemProcessor.TYPE_ADVANCED),
@@ -528,10 +528,10 @@ public class CommonProxy {
             'E', new ItemStack(InfinityStorageItems.QUARTZ_ENRICHED_IRON)
         ));
 
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeUpgrade(ItemUpgrade.TYPE_RANGE));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeUpgrade(ItemUpgrade.TYPE_SPEED));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeUpgrade(ItemUpgrade.TYPE_CRAFTING));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeUpgrade(ItemUpgrade.TYPE_INTERDIMENSIONAL));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeUpgrade(ItemUpgrade.TYPE_RANGE));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeUpgrade(ItemUpgrade.TYPE_SPEED));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeUpgrade(ItemUpgrade.TYPE_INTERDIMENSIONAL));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeUpgrade(ItemUpgrade.TYPE_CRAFTING));
 
         GameRegistry.addShapedRecipe(new ItemStack(InfinityStorageItems.UPGRADE, 1, ItemUpgrade.TYPE_STACK),
             "USU",
@@ -542,16 +542,16 @@ public class CommonProxy {
         );
 
         // Storage Blocks
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeStorage(EnumItemStorageType.TYPE_1K, ItemStoragePart.TYPE_1K));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeStorage(EnumItemStorageType.TYPE_4K, ItemStoragePart.TYPE_4K));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeStorage(EnumItemStorageType.TYPE_16K, ItemStoragePart.TYPE_16K));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeStorage(EnumItemStorageType.TYPE_64K, ItemStoragePart.TYPE_64K));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeStorage(EnumItemStorageType.TYPE_1K, ItemStoragePart.TYPE_1K));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeStorage(EnumItemStorageType.TYPE_4K, ItemStoragePart.TYPE_4K));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeStorage(EnumItemStorageType.TYPE_16K, ItemStoragePart.TYPE_16K));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeStorage(EnumItemStorageType.TYPE_64K, ItemStoragePart.TYPE_64K));
 
         // Fluid Storage Blocks
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeFluidStorage(EnumFluidStorageType.TYPE_64K, ItemFluidStoragePart.TYPE_64K));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeFluidStorage(EnumFluidStorageType.TYPE_128K, ItemFluidStoragePart.TYPE_128K));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeFluidStorage(EnumFluidStorageType.TYPE_256K, ItemFluidStoragePart.TYPE_256K));
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeFluidStorage(EnumFluidStorageType.TYPE_512K, ItemFluidStoragePart.TYPE_512K));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeFluidStorage(EnumFluidStorageType.TYPE_64K, ItemFluidStoragePart.TYPE_64K));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeFluidStorage(EnumFluidStorageType.TYPE_128K, ItemFluidStoragePart.TYPE_128K));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeFluidStorage(EnumFluidStorageType.TYPE_256K, ItemFluidStoragePart.TYPE_256K));
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeFluidStorage(EnumFluidStorageType.TYPE_512K, ItemFluidStoragePart.TYPE_512K));
 
         // Crafting Monitor
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(InfinityStorageBlocks.CRAFTING_MONITOR),
@@ -565,7 +565,7 @@ public class CommonProxy {
         ));
 
         // Interface
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
             new ItemStack(InfinityStorageBlocks.INTERFACE),
             200,
             new ItemStack(InfinityStorageBlocks.IMPORTER),
@@ -574,7 +574,7 @@ public class CommonProxy {
         ));
 
         // Fluid Interface
-        InfinityStorageAPI.SOLDERER_REGISTRY.addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
             new ItemStack(InfinityStorageBlocks.FLUID_INTERFACE),
             200,
             new ItemStack(Items.BUCKET),
@@ -635,9 +635,11 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent e) {
+        MinecraftForge.EVENT_BUS.register(new IngameConfigEventHandler());
     }
 
     public void postInit(FMLPostInitializationEvent e) {
+        // NO OP
     }
 
     private void registerBlock(BlockBase block) {

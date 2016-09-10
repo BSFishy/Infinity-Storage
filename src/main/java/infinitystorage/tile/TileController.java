@@ -337,12 +337,6 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
 
                 updateBlock();
             }
-
-            if (getEnergyScaledForComparator() != lastEnergyComparator) {
-                lastEnergyComparator = getEnergyScaledForComparator();
-
-                worldObj.updateComparatorOutputLevel(pos, InfinityStorageBlocks.CONTROLLER);
-            }
         }
 
         super.update();
@@ -722,7 +716,7 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
 
     @Override
     public void addConnections(int input) {
-        CONNECTIONS = ((CONNECTIONS + input > InfinityConfig.maxChannels) ? InfinityConfig.maxChannels : CONNECTIONS + input);
+        CONNECTIONS = ((CONNECTIONS + input > InfinityStorage.maxChannels) ? InfinityStorage.maxChannels : CONNECTIONS + input);
     }
 
     @Override
@@ -800,7 +794,7 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
             if (container instanceof ICraftingPatternContainer) {
                 ICraftingPattern pattern = ((ICraftingPatternProvider) stack.getItem()).create(world, stack, (ICraftingPatternContainer) container);
 
-                ICraftingTaskFactory factory = InfinityStorageAPI.CRAFTING_TASK_REGISTRY.getFactory(tag.getString(NBT_CRAFTING_TASK_TYPE));
+                ICraftingTaskFactory factory = InfinityStorageAPI.instance().getCraftingTaskRegistry().getFactory(tag.getString(NBT_CRAFTING_TASK_TYPE));
 
                 if (factory != null) {
                     return factory.create(world, tag, pattern);
@@ -874,10 +868,6 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
         return getEnergyScaled(energy.getEnergyStored(), energy.getMaxEnergyStored(), 7);
     }
 
-    public int getEnergyScaledForComparator() {
-        return getEnergyScaled(energy.getEnergyStored(), energy.getMaxEnergyStored(), 15);
-    }
-
     @Override
     public int getMaxEnergyStored(EnumFacing from) {
         return energy.getMaxEnergyStored();
@@ -948,8 +938,8 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     }
 
     @Override
-    public void reloadCables(){
+    public void reloadCables(EntityPlayer player){
         channelDataInit();
-        channelData.reloadCables();
+        channelData.reloadCables(player);
     }
 }

@@ -11,6 +11,7 @@ import infinitystorage.api.storage.CompareUtils;
 import infinitystorage.api.storage.item.IGroupedItemStorage;
 import infinitystorage.api.storage.item.IItemStorage;
 import infinitystorage.api.storage.item.IItemStorageProvider;
+import net.minecraftforge.fml.common.FMLLog;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,6 +39,8 @@ public class GroupedItemStorage implements IGroupedItemStorage {
         stacks.clear();
 
         for (IItemStorage storage : storages) {
+            FMLLog.info("storage: " + storage.toString());
+            FMLLog.info("getItems: " + storage.getItems().toString());
             for (ItemStack stack : storage.getItems()) {
                 add(stack, true);
             }

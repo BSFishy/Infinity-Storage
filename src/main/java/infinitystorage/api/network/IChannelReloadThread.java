@@ -2,6 +2,7 @@ package infinitystorage.api.network;
 
 import infinitystorage.tile.TileCable;
 import infinitystorage.tile.TileNode;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface IChannelReloadThread {
      * @param cables The cables to loop through
      * @param ignore The cables/nodes to ignore
      */
-    void setup(List<TileCable> cables, List<TileEntity> ignore);
+    void setup(List<TileCable> cables, List<TileEntity> ignore, EntityPlayer player, INetworkMaster network);
 
     /**
      * Gets the number of channels used

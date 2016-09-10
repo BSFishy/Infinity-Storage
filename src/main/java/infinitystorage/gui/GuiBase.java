@@ -24,7 +24,7 @@ import java.util.*;
 public abstract class GuiBase extends GuiContainer {
     private static final Map<String, ResourceLocation> TEXTURE_CACHE = new HashMap<>();
 
-    public static final FluidRenderer FLUID_RENDERER = new FluidRenderer(Fluid.BUCKET_VOLUME, 16, 16);
+    public static final FluidRenderer FLUID_RENDERER = new FluidRenderer(-1, 16, 16);
 
     protected static final int SIDE_BUTTON_WIDTH = 20;
     protected static final int SIDE_BUTTON_HEIGHT = 20;

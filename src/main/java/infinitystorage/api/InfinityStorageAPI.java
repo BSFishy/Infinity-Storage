@@ -3,14 +3,26 @@ package infinitystorage.api;
 import infinitystorage.api.autocrafting.registry.ICraftingTaskRegistry;
 import infinitystorage.api.solderer.ISoldererRegistry;
 
-public final class InfinityStorageAPI {
-    /**
-     * The solderer registry, set in pre-initialization
-     */
-    public static ISoldererRegistry SOLDERER_REGISTRY;
+import java.lang.reflect.Field;
 
-    /**
-     * The crafting task registry, set in pre-initialization
-     */
-    public static ICraftingTaskRegistry CRAFTING_TASK_REGISTRY;
+public final class InfinityStorageAPI {
+    private static final String API_IMPL_CLASS = "infinitystorage.apiimpl.API";
+    private static final String API_IMPL_FIELD = "INSTANCE";
+
+    private static final IAPI API;
+
+    static {
+        try {
+            Class<?> apiClass = Class.forName(API_IMPL_CLASS);
+            Field apiField = apiClass.getField(API_IMPL_FIELD);
+
+            API = (IAPI) apiField.get(apiClass);
+        } catch (Exception e) {
+            throw new Error("The Infinity Storage IAPI implementation is unavailable, make sure Infinity Storage is installed");
+        }
+    }
+
+    public static IAPI instance() {
+        return API;
+    }
 }

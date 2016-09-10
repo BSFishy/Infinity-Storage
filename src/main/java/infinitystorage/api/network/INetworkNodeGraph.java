@@ -22,6 +22,12 @@ public interface INetworkNodeGraph {
     List<INetworkNode> all();
 
     /**
+     * Replaces an old network node with a new one
+     * @param node The node
+     */
+    void replace(INetworkNode node);
+
+    /**
      * Disconnects and notifies all connected nodes.
      */
     void disconnectAll();

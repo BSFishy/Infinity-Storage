@@ -6,37 +6,24 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
 import infinitystorage.api.autocrafting.ICraftingPattern;
 import infinitystorage.api.autocrafting.ICraftingPatternContainer;
+import infinitystorage.api.autocrafting.task.CraftingTask;
 import infinitystorage.api.network.INetworkMaster;
-import infinitystorage.api.network.NetworkUtils;
 import infinitystorage.api.storage.CompareUtils;
+import infinitystorage.apiimpl.storage.fluid.FluidUtils;
 
 public class CraftingTaskProcessing extends CraftingTask {
-    public static final String NBT_SATISFIED = "Satisfied";
     public static final String NBT_SATISFIED_INSERTION = "SatisfiedInsertion";
-    public static final String NBT_CHECKED = "Checked";
 
-    private boolean satisfied[];
     private boolean satisfiedInsertion[];
-    private boolean checked[];
 
     public CraftingTaskProcessing(ICraftingPattern pattern) {
         super(pattern);
 
-        this.satisfied = new boolean[pattern.getInputs().size()];
         this.satisfiedInsertion = new boolean[pattern.getOutputs().size()];
-        this.checked = new boolean[pattern.getInputs().size()];
-    }
-
-    public void setSatisfied(boolean[] satisfied) {
-        this.satisfied = satisfied;
     }
 
     public void setSatisfiedInsertion(boolean[] satisfiedInsertion) {
         this.satisfiedInsertion = satisfiedInsertion;
-    }
-
-    public void setChecked(boolean[] checked) {
-        this.checked = checked;
     }
 
     @Override
@@ -47,7 +34,7 @@ public class CraftingTaskProcessing extends CraftingTask {
             ItemStack input = pattern.getInputs().get(i);
 
             if (!satisfied[i]) {
-                ItemStack received = NetworkUtils.extractItem(network, input, input.stackSize);
+                ItemStack received = FluidUtils.extractItemOrIfBucketLookInFluids(network, input, input.stackSize);
 
                 if (received != null) {
                     satisfied[i] = true;
@@ -79,10 +66,10 @@ public class CraftingTaskProcessing extends CraftingTask {
             }
         }
 
-        return isDone();
+        return isReady();
     }
 
-    private boolean isDone() {
+    private boolean isReady() {
         for (boolean item : satisfiedInsertion) {
             if (!item) {
                 return false;
@@ -92,8 +79,18 @@ public class CraftingTaskProcessing extends CraftingTask {
         return true;
     }
 
+    private boolean isReadyToInsert() {
+        for (boolean item : satisfied) {
+            if (!item) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public boolean onInserted(ItemStack stack) {
-        if (isDone()) {
+        if (isReady()) {
             return false;
         }
 
@@ -116,21 +113,9 @@ public class CraftingTaskProcessing extends CraftingTask {
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
 
-        writeBooleanArray(tag, NBT_SATISFIED, satisfied);
         writeBooleanArray(tag, NBT_SATISFIED_INSERTION, satisfiedInsertion);
-        writeBooleanArray(tag, NBT_CHECKED, checked);
 
         return tag;
-    }
-
-    private boolean isReadyToInsert() {
-        for (boolean item : satisfied) {
-            if (!item) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     @Override
@@ -144,7 +129,7 @@ public class CraftingTaskProcessing extends CraftingTask {
 
             if (!satisfied[i] && !childrenCreated[i]) {
                 if (!missingItems) {
-                    builder.append("I=gui.infinitystorage:crafting_monitor.missing_items\n");
+                    builder.append("I=gui.refinedstorage:crafting_monitor.missing_items\n");
 
                     missingItems = true;
                 }
@@ -160,7 +145,7 @@ public class CraftingTaskProcessing extends CraftingTask {
 
             if (!satisfied[i] && childrenCreated[i]) {
                 if (!itemsCrafting) {
-                    builder.append("I=gui.infinitystorage:crafting_monitor.items_crafting\n");
+                    builder.append("I=gui.refinedstorage:crafting_monitor.items_crafting\n");
 
                     itemsCrafting = true;
                 }
@@ -170,7 +155,7 @@ public class CraftingTaskProcessing extends CraftingTask {
         }
 
         if (isReadyToInsert()) {
-            builder.append("I=gui.infinitystorage:crafting_monitor.items_processing\n");
+            builder.append("I=gui.refinedstorage:crafting_monitor.items_processing\n");
 
             for (int i = 0; i < pattern.getInputs().size(); ++i) {
                 builder.append("T=").append(pattern.getInputs().get(i).getUnlocalizedName()).append(".name\n");

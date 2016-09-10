@@ -66,7 +66,7 @@ public class TileSolderer extends TileNode {
         if (items.getStackInSlot(1) == null && items.getStackInSlot(2) == null && items.getStackInSlot(3) == null) {
             stop();
         } else {
-            ISoldererRecipe newRecipe = InfinityStorageAPI.SOLDERER_REGISTRY.getRecipe(items);
+            ISoldererRecipe newRecipe = InfinityStorageAPI.instance().getSoldererRegistry().getRecipe(items);
 
             if (newRecipe == null) {
                 stop();
@@ -134,7 +134,7 @@ public class TileSolderer extends TileNode {
         readItems(items, 0, tag);
         readItems(upgrades, 1, tag);
 
-        recipe = InfinityStorageAPI.SOLDERER_REGISTRY.getRecipe(items);
+        recipe = InfinityStorageAPI.instance().getSoldererRegistry().getRecipe(items);
 
         if (tag.hasKey(NBT_WORKING)) {
             working = tag.getBoolean(NBT_WORKING);

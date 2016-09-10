@@ -28,7 +28,7 @@ public final class NetworkUtils {
     }
 
     public static ICraftingTask createCraftingTask(INetworkMaster network, ICraftingPattern pattern) {
-        return InfinityStorageAPI.CRAFTING_TASK_REGISTRY.getFactory(pattern.getId()).create(network.getNetworkWorld(), null, pattern);
+        return InfinityStorageAPI.instance().getCraftingTaskRegistry().getFactory(pattern.getId()).create(network.getNetworkWorld(), null, pattern);
     }
 
     public static boolean hasPattern(INetworkMaster network, ItemStack stack) {

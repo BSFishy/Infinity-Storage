@@ -2,6 +2,7 @@ package infinitystorage.api.network;
 
 import cofh.api.energy.EnergyStorage;
 import infinitystorage.tile.TileNode;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -266,5 +267,5 @@ public interface INetworkMaster {
     /**
      * Reloads all of the data concerning the cables connected to the controller
      */
-    void reloadCables();
+    void reloadCables(EntityPlayer player);
 }
