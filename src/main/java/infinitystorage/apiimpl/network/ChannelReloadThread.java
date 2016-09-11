@@ -70,6 +70,10 @@ public class ChannelReloadThread extends Thread implements IChannelReloadThread 
                         channelsUsed++;
                         connected.add((TileNode) tile);
                         ((TileNode) tile).onConnected(network);
+                    }else{
+                        if(connected.contains(tile))
+                            connected.remove(tile);
+                        ((TileNode) tile).onDisconnected(network);
                     }
                 }
             });
@@ -79,10 +83,17 @@ public class ChannelReloadThread extends Thread implements IChannelReloadThread 
         try {
             sleep(sleepTime);
         } catch (InterruptedException e) {
+            FMLLog.warning("The reload thread was interrupted.");
             return;
         }
-        if(newCables.size() > 0)
+
+        if(newCables.size() > 0) {
+            FMLLog.info("recursiveRun being called");
             recursiveRun(newCables);
+        }else{
+            FMLLog.info("returning");
+            return;
+        }
     }
 
     @Override

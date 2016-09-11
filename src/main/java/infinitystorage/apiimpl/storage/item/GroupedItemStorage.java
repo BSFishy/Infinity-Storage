@@ -39,8 +39,6 @@ public class GroupedItemStorage implements IGroupedItemStorage {
         stacks.clear();
 
         for (IItemStorage storage : storages) {
-            FMLLog.info("storage: " + storage.toString());
-            FMLLog.info("getItems: " + storage.getItems().toString());
             for (ItemStack stack : storage.getItems()) {
                 add(stack, true);
             }
