@@ -100,11 +100,8 @@ public class WirelessGridHandler implements IWirelessGridHandler {
 
     @Override
     public IWirelessGridConsumer getConsumer(EntityPlayer player) {
-        Iterator<IWirelessGridConsumer> it = consumers.iterator();
 
-        while (it.hasNext()) {
-            IWirelessGridConsumer consumer = it.next();
-
+        for (IWirelessGridConsumer consumer : consumers) {
             if (consumer.getPlayer() == player) {
                 return consumer;
             }

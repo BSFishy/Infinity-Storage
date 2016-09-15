@@ -15,7 +15,7 @@ import infinitystorage.network.MessageGridCraftingStart;
 
 import java.io.IOException;
 
-public class GuiCraftingSettings extends GuiBase {
+public class GuiCraftingStart extends GuiBase {
     private static final int DEFAULT_AMOUNT = 1;
 
     private GuiTextField amountField;
@@ -25,7 +25,7 @@ public class GuiCraftingSettings extends GuiBase {
     private GuiButton cancelButton;
     private GuiButton[] incrementButtons = new GuiButton[6];
 
-    public GuiCraftingSettings(GuiGrid gui, EntityPlayer player, ClientStackItem stack) {
+    public GuiCraftingStart(GuiGrid gui, EntityPlayer player, ClientStackItem stack) {
         super(new ContainerCraftingSettings(player, stack.getStack()), 172, 99);
 
         this.gui = gui;
@@ -111,7 +111,7 @@ public class GuiCraftingSettings extends GuiBase {
 
                     int newAmount = Integer.parseInt(incrementButton.displayString);
 
-                    newAmount = Math.min(Math.max(DEFAULT_AMOUNT, oldAmount + newAmount), ItemGridHandler.MAX_CRAFTING_PER_REQUEST);
+                    newAmount = Math.max(DEFAULT_AMOUNT, ((oldAmount == 1 && newAmount != 1) ? 0 : oldAmount) + newAmount);
 
                     amountField.setText(String.valueOf(newAmount));
 
@@ -124,7 +124,7 @@ public class GuiCraftingSettings extends GuiBase {
     private void startRequest() {
         Integer quantity = Ints.tryParse(amountField.getText());
 
-        if (quantity != null && quantity > 0 && quantity <= ItemGridHandler.MAX_CRAFTING_PER_REQUEST) {
+        if (quantity != null && quantity > 0) {
             InfinityStorage.INSTANCE.network.sendToServer(new MessageGridCraftingStart(stack.getHash(), quantity));
 
             close();

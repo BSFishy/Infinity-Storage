@@ -41,8 +41,10 @@ public class GuiNetworkTransmitter extends GuiBase {
             distance = t("gui.infinitystorage:network_transmitter.missing_upgrade");
         } else if (TileNetworkTransmitter.RECEIVER_DIMENSION.getValue() != networkTransmitter.getWorld().provider.getDimension()) {
             distance = t("gui.infinitystorage:network_transmitter.dimension", TileNetworkTransmitter.RECEIVER_DIMENSION.getValue());
-        } else {
+        } else if(TileNetworkTransmitter.DISTANCE.getValue() != -1) {
             distance = t("gui.infinitystorage:network_transmitter.distance", TileNetworkTransmitter.DISTANCE.getValue());
+        } else {
+            distance = t("gui.infinitystorage:network_transmitter.missing_card");
         }
 
         drawString(51, 24, distance);

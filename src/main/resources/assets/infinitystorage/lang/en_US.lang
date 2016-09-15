@@ -107,6 +107,9 @@ sidebutton.infinitystorage:detector.mode=Mode
 sidebutton.infinitystorage:detector.mode.0=Emit signal when under the amount
 sidebutton.infinitystorage:detector.mode.1=Emit signal when on the amount
 sidebutton.infinitystorage:detector.mode.2=Emit signal when above the amount
+sidebutton.infinitystorage:detector.mode.3=Emit signal when is autocrafting
+
+sidebutton.infinitystorage:crafter.autocraft_signal=Trigger autocrafting with redstone signal
 
 block.infinitystorage:controller.0.name=Controller
 block.infinitystorage:controller.1.name=Creative Controller

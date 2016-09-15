@@ -1,6 +1,5 @@
 package infinitystorage.proxy;
 
-import infinitystorage.InfinityConfig;
 import mcmultipart.client.multipart.ModelMultipartContainer;
 import mcmultipart.raytrace.PartMOP;
 import mcmultipart.raytrace.RayTraceUtils;
@@ -36,11 +35,9 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void onModelBake(ModelBakeEvent e) {
         for (ModelResourceLocation model : e.getModelRegistry().getKeys()) {
-            for (BlockCable cable : cableTypes) {
-                if (model.getResourceDomain().equals(InfinityStorage.ID) && model.getResourcePath().equals(cable.getName()) && !model.getVariant().equals("inventory")) {
-                    e.getModelRegistry().putObject(model, new ModelMultipartContainer(e.getModelRegistry().getObject(model), input -> cable.canRenderInLayer(input)));
-                }
-            }
+            cableTypes.stream().filter(cable -> model.getResourceDomain().equals(InfinityStorage.ID) && model.getResourcePath().equals(cable.getName()) && !model.getVariant().equals("inventory")).forEach(cable -> {
+                e.getModelRegistry().putObject(model, ModelMultipartContainer.fromBlock(e.getModelRegistry().getObject(model), cable));
+            });
         }
     }
 

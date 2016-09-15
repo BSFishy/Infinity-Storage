@@ -34,7 +34,7 @@ public class GuiCraftingMonitor extends GuiBase {
     public GuiCraftingMonitor(ContainerCraftingMonitor container, TileCraftingMonitor craftingMonitor) {
         super(container, 176, 230);
 
-        setScrollbar(new Scrollbar(157, 20, 12, 89));
+        scrollbar = new Scrollbar(157, 20, 12, 89);
 
         this.craftingMonitor = craftingMonitor;
     }
@@ -55,8 +55,8 @@ public class GuiCraftingMonitor extends GuiBase {
 
     @Override
     public void update(int x, int y) {
-        getScrollbar().setEnabled(getRows() > VISIBLE_ROWS);
-        getScrollbar().setMaxOffset(getRows() - VISIBLE_ROWS);
+        scrollbar.setEnabled(getRows() > VISIBLE_ROWS);
+        scrollbar.setMaxOffset(getRows() - VISIBLE_ROWS);
 
         if (itemSelected >= getTasks().size()) {
             itemSelected = -1;
@@ -82,7 +82,7 @@ public class GuiCraftingMonitor extends GuiBase {
         drawString(7, 7, t("gui.infinitystorage:crafting_monitor"));
         drawString(7, 137, t("container.inventory"));
 
-        int item = getScrollbar().getOffset();
+        int item = scrollbar.getOffset();
 
         RenderHelper.enableGUIStandardItemLighting();
 
@@ -121,7 +121,7 @@ public class GuiCraftingMonitor extends GuiBase {
 
                 GlStateManager.popMatrix();
 
-                if (inBounds(x + 4, y + 4, 16, 16, mouseX, mouseY) && !task.getStatus().trim().equals("")) {
+                if (inBounds(x + 2, y + 1, 16, 16, mouseX, mouseY) && !task.getStatus().trim().equals("")) {
                     lines = task.getStatus().split("\n");
 
                     for (int j = 0; j < lines.length; ++j) {
@@ -173,7 +173,7 @@ public class GuiCraftingMonitor extends GuiBase {
         itemSelected = -1;
 
         if (mouseButton == 0 && inBounds(8, 20, 144, 90, mouseX - guiLeft, mouseY - guiTop)) {
-            int item = getScrollbar().getOffset();
+            int item = scrollbar.getOffset();
 
             for (int i = 0; i < VISIBLE_ROWS; ++i) {
                 int ix = 8;

@@ -6,6 +6,8 @@ import infinitystorage.api.solderer.ISoldererRegistry;
 import infinitystorage.apiimpl.autocrafting.registry.CraftingTaskRegistry;
 import infinitystorage.apiimpl.solderer.SoldererRegistry;
 
+import javax.annotation.Nonnull;
+
 public class API implements IAPI {
     public static final IAPI INSTANCE = new API();
 
@@ -13,11 +15,13 @@ public class API implements IAPI {
     private ICraftingTaskRegistry craftingTaskRegistry = new CraftingTaskRegistry();
 
     @Override
+    @Nonnull
     public ISoldererRegistry getSoldererRegistry() {
         return soldererRegistry;
     }
 
     @Override
+    @Nonnull
     public ICraftingTaskRegistry getCraftingTaskRegistry() {
         return craftingTaskRegistry;
     }

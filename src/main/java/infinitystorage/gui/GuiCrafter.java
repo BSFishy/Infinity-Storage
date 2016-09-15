@@ -1,6 +1,7 @@
 package infinitystorage.gui;
 
 import infinitystorage.container.ContainerCrafter;
+import infinitystorage.gui.sidebutton.SideButtonCrafterAutocraftSignal;
 import infinitystorage.gui.sidebutton.SideButtonRedstoneMode;
 import infinitystorage.tile.TileCrafter;
 
@@ -12,6 +13,7 @@ public class GuiCrafter extends GuiBase {
     @Override
     public void init(int x, int y) {
         addSideButton(new SideButtonRedstoneMode(TileCrafter.REDSTONE_MODE));
+        addSideButton(new SideButtonCrafterAutocraftSignal());
     }
 
     @Override

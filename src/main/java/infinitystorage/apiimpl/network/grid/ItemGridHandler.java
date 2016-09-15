@@ -12,7 +12,6 @@ import infinitystorage.api.network.grid.IItemGridHandler;
 import infinitystorage.api.storage.CompareUtils;
 
 public class ItemGridHandler implements IItemGridHandler {
-    public static final int MAX_CRAFTING_PER_REQUEST = 500;
 
     private INetworkMaster network;
 
@@ -118,7 +117,7 @@ public class ItemGridHandler implements IItemGridHandler {
 
     @Override
     public void onCraftingRequested(int hash, int quantity) {
-        if (quantity <= 0 || quantity > MAX_CRAFTING_PER_REQUEST) {
+        if (quantity <= 0) {
             return;
         }
 

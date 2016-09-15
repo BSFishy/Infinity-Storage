@@ -3,7 +3,7 @@
       "modid": "infinitystorage",
       "name": "Infinity Storage",
       "description": "A fork of Refined Storage, to bring back a couple of key features from AE2.",
-      "version": "1.0",
+      "version": "0.2",
       "mcversion": "1.10.2",
       "url": "",
       "updateUrl": "",

@@ -28,7 +28,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "0.1"
+version = "0.2"
 group= "infinitystorage" 
 archivesBaseName = "infinitystorage"
 
@@ -36,7 +36,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 minecraft {
-    version = "1.10.2-12.18.1.2077"
+    version = "1.10.2-12.18.1.2084"
     runDir = "run"
     useDepAts = true
     mappings = "snapshot_20160910"
@@ -61,7 +61,7 @@ repositories {
 dependencies {
     deobfCompile "mezz.jei:jei_1.10.2:3.9.+"
     compile "net.darkhax.tesla:Tesla:1.10-1.2.+"
-    compile "net.industrial-craft:industrialcraft-2:2.6.60-ex110:api"
+    compile "net.industrial-craft:industrialcraft-2:2.6.66-ex110:api"
     deobfCompile "MCMultiPart:MCMultiPart:1.2.1+:universal"
 }
 
@@ -85,13 +85,33 @@ processResources
     }
 }
 
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier 'deobf'
+}
+
+task apiJar(type: Jar, dependsOn: 'sourceMainJava') {
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+    include 'refinedstorage/api/**/*'
+    classifier 'api'
+}
+
+artifacts {
+    archives deobfJar
+    archives apiJar
+    archives jar
+}
+
 publishing {
     publications {
         MyPublication(MavenPublication) {
-            from components.java
             groupId = project.group
             artifactId = project.archivesBaseName
             version = project.version + '-' + System.getenv('TRAVIS_BUILD_NUMBER')
+            artifact deobfJar
+            artifact apiJar
+            artifact jar
         }
     }
 }
@@ -110,3 +130,5 @@ bintray {
         }
     }
 }
+
+idea { module { inheritOutputDirs = true } }

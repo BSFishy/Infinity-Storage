@@ -3,6 +3,8 @@ package infinitystorage.api.autocrafting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandler;
 
+import java.util.List;
+
 /**
  * Represents the container where the pattern is in.
  */
@@ -22,7 +24,7 @@ public interface ICraftingPatternContainer {
     /**
      * @return The patterns stored in this container
      */
-    IItemHandler getPatterns();
+    List<ICraftingPattern> getPatterns();
 
     /**
      * @return The position of this container

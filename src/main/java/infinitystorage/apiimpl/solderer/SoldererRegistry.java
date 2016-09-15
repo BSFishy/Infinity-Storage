@@ -1,5 +1,6 @@
 package infinitystorage.apiimpl.solderer;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import infinitystorage.api.solderer.ISoldererRecipe;
 import infinitystorage.api.solderer.ISoldererRegistry;
@@ -25,17 +26,19 @@ public class SoldererRegistry implements ISoldererRegistry {
 
     @Override
     @Nullable
-    public ISoldererRecipe getRecipe(@Nonnull IItemHandler items) {
+    public ISoldererRecipe getRecipe(@Nonnull IItemHandler rows) {
         for (ISoldererRecipe recipe : recipes) {
             boolean found = true;
 
             for (int i = 0; i < 3; ++i) {
-                if (!CompareUtils.compareStackNoQuantity(recipe.getRow(i), items.getStackInSlot(i)) && !CompareUtils.compareStackOreDict(recipe.getRow(i), items.getStackInSlot(i))) {
+                if (!CompareUtils.compareStackNoQuantity(recipe.getRow(i), rows.getStackInSlot(i)) && !CompareUtils.compareStackOreDict(recipe.getRow(i), rows.getStackInSlot(i))) {
                     found = false;
                 }
 
-                if (items.getStackInSlot(i) != null && recipe.getRow(i) != null) {
-                    if (items.getStackInSlot(i).stackSize < recipe.getRow(i).stackSize) {
+                ItemStack row = recipe.getRow(i);
+
+                if(rows.getStackInSlot(i) != null && row != null){
+                    if(rows.getStackInSlot(i).stackSize < row.stackSize){
                         found = false;
                     }
                 }

@@ -18,10 +18,13 @@ public final class InfinityStorageAPI {
 
             API = (IAPI) apiField.get(apiClass);
         } catch (Exception e) {
-            throw new Error("The Infinity Storage IAPI implementation is unavailable, make sure Infinity Storage is installed");
+            throw new Error("The Infinity Storage IAPI implementation is unavailable, make sure Infinity Storage is installed", e);
         }
     }
 
+    /**
+     * @return The Infinity Storage API
+     */
     public static IAPI instance() {
         return API;
     }
