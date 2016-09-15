@@ -280,5 +280,6 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.FLUID_STORAGE), EnumFluidStorageType.TYPE_256K.getId(), new ModelResourceLocation("infinitystorage:fluid_storage", "type=256k"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.FLUID_STORAGE), EnumFluidStorageType.TYPE_512K.getId(), new ModelResourceLocation("infinitystorage:fluid_storage", "type=512k"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.FLUID_STORAGE), EnumFluidStorageType.TYPE_CREATIVE.getId(), new ModelResourceLocation("infinitystorage:fluid_storage", "type=creative"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.DISK_MANIPULATOR), 0, new ModelResourceLocation("infinitystorage:disk_manipulator", "inventory"));
     }
 }

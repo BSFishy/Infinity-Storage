@@ -119,6 +119,7 @@ block.infinitystorage:grid.1.name=Crafting Grid
 block.infinitystorage:grid.2.name=Pattern Grid
 block.infinitystorage:grid.3.name=Fluid Grid
 block.infinitystorage:disk_drive.name=Disk Drive
+block.infinitystorage:disk_manipulator.name=Disk Manipulator
 block.infinitystorage:external_storage.name=External Storage
 block.infinitystorage:importer.name=Importer
 block.infinitystorage:exporter.name=Exporter
