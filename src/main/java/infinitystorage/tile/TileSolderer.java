@@ -15,11 +15,13 @@ import infinitystorage.api.network.INetworkMaster;
 import infinitystorage.api.solderer.ISoldererRecipe;
 import infinitystorage.api.storage.CompareUtils;
 import infinitystorage.inventory.ItemHandlerBasic;
-import infinitystorage.inventory.ItemHandlerSolderer;
 import infinitystorage.inventory.ItemHandlerUpgrade;
 import infinitystorage.item.ItemUpgrade;
 import infinitystorage.tile.data.ITileDataProducer;
 import infinitystorage.tile.data.TileDataParameter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class TileSolderer extends TileNode {
     public static final TileDataParameter<Integer> DURATION = new TileDataParameter<>(DataSerializers.VARINT, 0, new ITileDataProducer<Integer, TileSolderer>() {
@@ -39,9 +41,29 @@ public class TileSolderer extends TileNode {
     private static final String NBT_WORKING = "Working";
     private static final String NBT_PROGRESS = "Progress";
 
-    private ItemHandlerBasic items = new ItemHandlerBasic(4, this);
+    private ItemHandlerBasic items = new ItemHandlerBasic(3, this){
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
+            Set<Integer> possibleSlots = new HashSet<>();
+
+            for(ISoldererRecipe recipe : InfinityStorageAPI.instance().getSoldererRegistry().getRecipes()){
+                for(int i = 0; i < 3; ++i){
+                    if(CompareUtils.compareStackNoQuantity(recipe.getRow(i), stack) || CompareUtils.compareStackOreDict(recipe.getRow(i), stack)){
+                        possibleSlots.add(i);
+                    }
+                }
+            }
+
+            return possibleSlots.contains(slot) ? super.insertItem(slot, stack, simulate) : stack;
+        }
+    };
+    private ItemHandlerBasic result = new ItemHandlerBasic(1, this){
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
+            return stack;
+        }
+    };
     private ItemHandlerUpgrade upgrades = new ItemHandlerUpgrade(4, this, ItemUpgrade.TYPE_SPEED);
-    private ItemHandlerSolderer[] itemsFacade = new ItemHandlerSolderer[EnumFacing.values().length];
 
     private ISoldererRecipe recipe;
 
@@ -63,7 +85,7 @@ public class TileSolderer extends TileNode {
     public void updateNode() {
         boolean wasWorking = working;
 
-        if (items.getStackInSlot(1) == null && items.getStackInSlot(2) == null && items.getStackInSlot(3) == null) {
+        if (items.getStackInSlot(1) == null && items.getStackInSlot(2) == null && result.getStackInSlot(0) == null) {
             stop();
         } else {
             ISoldererRecipe newRecipe = InfinityStorageAPI.instance().getSoldererRegistry().getRecipe(items);
@@ -71,9 +93,9 @@ public class TileSolderer extends TileNode {
             if (newRecipe == null) {
                 stop();
             } else if (newRecipe != recipe) {
-                boolean sameItem = items.getStackInSlot(3) != null ? CompareUtils.compareStackNoQuantity(items.getStackInSlot(3), newRecipe.getResult()) : false;
+                boolean sameItem = result.getStackInSlot(0) != null ? CompareUtils.compareStackNoQuantity(result.getStackInSlot(0), newRecipe.getResult()) : false;
 
-                if (items.getStackInSlot(3) == null || (sameItem && ((items.getStackInSlot(3).stackSize + newRecipe.getResult().stackSize) <= items.getStackInSlot(3).getMaxStackSize()))) {
+                if (result.getStackInSlot(0) == null || (sameItem && ((result.getStackInSlot(0).stackSize + newRecipe.getResult().stackSize) <= result.getStackInSlot(0).getMaxStackSize()))) {
                     recipe = newRecipe;
                     progress = 0;
                     working = true;
@@ -84,10 +106,10 @@ public class TileSolderer extends TileNode {
                 progress += 1 + upgrades.getUpgradeCount(ItemUpgrade.TYPE_SPEED);
 
                 if (progress >= recipe.getDuration()) {
-                    if (items.getStackInSlot(3) != null) {
-                        items.getStackInSlot(3).stackSize += recipe.getResult().stackSize;
+                    if (result.getStackInSlot(0) != null) {
+                        result.getStackInSlot(0).stackSize += recipe.getResult().stackSize;
                     } else {
-                        items.setStackInSlot(3, recipe.getResult().copy());
+                        result.setStackInSlot(0, recipe.getResult().copy());
                     }
 
                     for (int i = 0; i < 3; ++i) {
@@ -133,6 +155,7 @@ public class TileSolderer extends TileNode {
 
         readItems(items, 0, tag);
         readItems(upgrades, 1, tag);
+        readItems(result, 2, tag);
 
         recipe = InfinityStorageAPI.instance().getSoldererRegistry().getRecipe(items);
 
@@ -151,6 +174,7 @@ public class TileSolderer extends TileNode {
 
         writeItems(items, 0, tag);
         writeItems(upgrades, 1, tag);
+        writeItems(result, 2, tag);
 
         tag.setBoolean(NBT_WORKING, working);
         tag.setInteger(NBT_PROGRESS, progress);
@@ -182,6 +206,10 @@ public class TileSolderer extends TileNode {
         return items;
     }
 
+    public ItemHandlerBasic getResult() {
+        return result;
+    }
+
     public IItemHandler getUpgrades() {
         return upgrades;
     }
@@ -194,17 +222,7 @@ public class TileSolderer extends TileNode {
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (facing == null) {
-                return (T) items;
-            }
-
-            int i = facing.ordinal();
-
-            if (itemsFacade[i] == null) {
-                itemsFacade[i] = new ItemHandlerSolderer(this, facing);
-            }
-
-            return (T) itemsFacade[i];
+            return facing == EnumFacing.DOWN ? (T) result : (T) items;
         }
 
         return super.getCapability(capability, facing);

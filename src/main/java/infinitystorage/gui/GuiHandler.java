@@ -137,6 +137,8 @@ public class GuiHandler implements IGuiHandler {
                 return new GuiFluidInterface((ContainerFluidInterface) getContainer(ID, player, tile));
             case InfinityStorageGui.FLUID_STORAGE:
                 return new GuiStorage((ContainerFluidStorage) getContainer(ID, player, tile), (TileFluidStorage) tile);
+            case InfinityStorageGui.DISK_MANIPULATOR:
+                return new GuiDiskManipulator((ContainerDiskManipulator) getContainer(ID, player, tile));
             default:
                 return null;
         }
