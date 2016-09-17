@@ -93,7 +93,7 @@ task deobfJar(type: Jar) {
 task apiJar(type: Jar, dependsOn: 'sourceMainJava') {
     from sourceSets.main.allSource
     from sourceSets.main.output
-    include 'refinedstorage/api/**/*'
+    include 'infinitystorage/api/**/*'
     classifier 'api'
 }
 

@@ -60,12 +60,14 @@ misc.infinitystorage:network_card.tooltip=Linked to %d, %d, %d.
 
 misc.infinitystorage:pattern.inputs=Inputs
 misc.infinitystorage:pattern.outputs=Outputs
+misc.infinitystorage:pattern.oredict=Uses ore dictionary
 misc.infinitystorage:pattern.invalid=Invalid pattern
 
 misc.infinitystorage:start=Start
 misc.infinitystorage:clear=Clear
 misc.infinitystorage:cancel_all=Cancel All
 misc.infinitystorage:priority=Priority
+misc.infinitystorage:use_oredict=Use oredict
 
 misc.infinitystorage:network_tool.tooltip=This is used to reload the channels for a controller
 misc.infinitystorage:network_tool.success=Successfully reloaded all of the channels

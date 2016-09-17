@@ -61,7 +61,7 @@ public class CraftingTaskNormal extends CraftingTask {
 
             if (!satisfied[i] && !childrenCreated[i] && checked[i]) {
                 if (!missingItems) {
-                    builder.append("I=gui.refinedstorage:crafting_monitor.missing_items\n");
+                    builder.append("I=gui.infinitystorage:crafting_monitor.missing_items\n");
 
                     missingItems = true;
                 }
@@ -77,7 +77,7 @@ public class CraftingTaskNormal extends CraftingTask {
 
             if (!satisfied[i] && childrenCreated[i] && checked[i]) {
                 if (!itemsCrafting) {
-                    builder.append("I=gui.refinedstorage:crafting_monitor.items_crafting\n");
+                    builder.append("I=gui.infinitystorage:crafting_monitor.items_crafting\n");
 
                     itemsCrafting = true;
                 }

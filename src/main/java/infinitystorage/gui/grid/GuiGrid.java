@@ -3,7 +3,9 @@ package infinitystorage.gui.grid;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
+import infinitystorage.tile.data.TileDataManager;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import infinitystorage.InfinityStorage;
 import infinitystorage.api.network.grid.IItemGridHandler;
@@ -54,6 +57,8 @@ public class GuiGrid extends GuiBase {
 
     private GuiTextField searchField;
 
+    private GuiCheckBox patternOredicted;
+
     private ContainerGrid container;
     private IGrid grid;
 
@@ -92,6 +97,10 @@ public class GuiGrid extends GuiBase {
         } else {
             searchField.xPosition = sx;
             searchField.yPosition = sy;
+        }
+
+        if(grid.getType() == EnumGridType.PATTERN) {
+            patternOredicted = addCheckBox(x + 64, y + 138, t("misc.infinitystorage:use_oredict"), TileGrid.PATTERN_OREDICTED.getValue());
         }
 
         if (grid.getType() != EnumGridType.FLUID) {
@@ -403,6 +412,15 @@ public class GuiGrid extends GuiBase {
     }
 
     @Override
+    protected void actionPerformed(GuiButton button) throws IOException{
+        super.actionPerformed(button);
+
+        if(button == patternOredicted){
+            TileDataManager.setParameter(TileGrid.PATTERN_OREDICTED, patternOredicted.isChecked());
+        }
+    }
+
+    @Override
     protected void keyTyped(char character, int keyCode) throws IOException {
         if (checkHotbarKeys(keyCode)) {
             // NO OP
@@ -425,6 +443,12 @@ public class GuiGrid extends GuiBase {
         if (searchField != null) {
             searchField.setCanLoseFocus(!TileGrid.isSearchBoxModeWithAutoselection(mode));
             searchField.setFocused(TileGrid.isSearchBoxModeWithAutoselection(mode));
+        }
+    }
+
+    public void updatePatternOredicted(boolean oredicted){
+        if(patternOredicted != null){
+            patternOredicted.setIsChecked(oredicted);
         }
     }
 }

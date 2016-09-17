@@ -129,7 +129,7 @@ public class CraftingTaskProcessing extends CraftingTask {
 
             if (!satisfied[i] && !childrenCreated[i]) {
                 if (!missingItems) {
-                    builder.append("I=gui.refinedstorage:crafting_monitor.missing_items\n");
+                    builder.append("I=gui.infinitystorage:crafting_monitor.missing_items\n");
 
                     missingItems = true;
                 }
@@ -145,7 +145,7 @@ public class CraftingTaskProcessing extends CraftingTask {
 
             if (!satisfied[i] && childrenCreated[i]) {
                 if (!itemsCrafting) {
-                    builder.append("I=gui.refinedstorage:crafting_monitor.items_crafting\n");
+                    builder.append("I=gui.infinitystorage:crafting_monitor.items_crafting\n");
 
                     itemsCrafting = true;
                 }
@@ -155,7 +155,7 @@ public class CraftingTaskProcessing extends CraftingTask {
         }
 
         if (isReadyToInsert()) {
-            builder.append("I=gui.refinedstorage:crafting_monitor.items_processing\n");
+            builder.append("I=gui.infinitystorage:crafting_monitor.items_processing\n");
 
             for (int i = 0; i < pattern.getInputs().size(); ++i) {
                 builder.append("T=").append(pattern.getInputs().get(i).getUnlocalizedName()).append(".name\n");

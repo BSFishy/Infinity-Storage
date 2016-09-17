@@ -132,7 +132,8 @@ public class NetworkNodeGraph implements INetworkNodeGraph {
                     changed = true;
                 }
             }
-        } else if (InfinityStorage.requireNetworkToolToReload) {
+        } else if (!InfinityStorage.requireNetworkToolToReload) {
+            //FMLLog.info("rebuilding network node graph");
             ChannelReloadThread crt = new ChannelReloadThread(world, false);
             crt.setupAtPosition(controller.getPos(), controller);
             crt.start();

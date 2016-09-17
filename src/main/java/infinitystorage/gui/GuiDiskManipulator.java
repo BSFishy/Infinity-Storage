@@ -34,7 +34,7 @@ public class GuiDiskManipulator extends GuiBase {
 
     @Override
     public void drawForeground(int mouseX, int mouseY) {
-        drawString(7, 7, t("block.refinedstorage:disk_manipulator.name"));
+        drawString(7, 7, t("block.infinitystorage:disk_manipulator.name"));
         drawString(7, 117, t("container.inventory"));
     }
 }

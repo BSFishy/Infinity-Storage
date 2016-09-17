@@ -8,7 +8,7 @@ import infinitystorage.tile.data.TileDataManager;
 public class SideButtonCrafterAutocraftSignal extends SideButton {
     @Override
     public String getTooltip(GuiBase gui) {
-        return TextFormatting.GREEN + gui.t("sidebutton.refinedstorage:crafter.autocraft_signal") + TextFormatting.RESET + "\n" + gui.t("gui." + (TileCrafter.AUTOCRAFT_SIGNAL.getValue() ? "yes" : "no"));
+        return TextFormatting.GREEN + gui.t("sidebutton.infinitystorage:crafter.autocraft_signal") + TextFormatting.RESET + "\n" + gui.t("gui." + (TileCrafter.AUTOCRAFT_SIGNAL.getValue() ? "yes" : "no"));
     }
 
     @Override

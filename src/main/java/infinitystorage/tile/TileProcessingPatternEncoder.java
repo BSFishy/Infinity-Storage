@@ -1,7 +1,13 @@
 package infinitystorage.tile;
 
+import infinitystorage.gui.GuiProcessingPatternEncoder;
+import infinitystorage.tile.data.ITileDataConsumer;
+import infinitystorage.tile.data.ITileDataProducer;
+import infinitystorage.tile.data.TileDataParameter;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -13,8 +19,33 @@ import infinitystorage.inventory.ItemValidatorBasic;
 import infinitystorage.item.ItemPattern;
 
 public class TileProcessingPatternEncoder extends TileBase {
+    public static final TileDataParameter<Boolean> PATTERN_OREDICTED = new TileDataParameter<>(DataSerializers.BOOLEAN, false, new ITileDataProducer<Boolean, TileProcessingPatternEncoder>() {
+        @Override
+        public Boolean getValue(TileProcessingPatternEncoder tile) {
+            return tile.patternOredicted;
+        }
+    }, new ITileDataConsumer<Boolean, TileProcessingPatternEncoder>() {
+        @Override
+        public void setValue(TileProcessingPatternEncoder tile, Boolean value) {
+            tile.patternOredicted = value;
+            tile.markDirty();
+        }
+    }, parameter -> {
+        if (Minecraft.getMinecraft().currentScreen instanceof GuiProcessingPatternEncoder) {
+            ((GuiProcessingPatternEncoder) Minecraft.getMinecraft().currentScreen).updatePatternOredicted(parameter.getValue());
+        }
+    });
+
+    private static final String NBT_PATTERN_OREDICTED = "PatternOredicted";
+
     private ItemHandlerBasic patterns = new ItemHandlerBasic(2, this, new ItemValidatorBasic(InfinityStorageItems.PATTERN));
     private ItemHandlerBasic configuration = new ItemHandlerBasic(9 * 2, this);
+
+    private boolean patternOredicted = false;
+
+    public TileProcessingPatternEncoder(){
+        dataManager.addWatchedParameter(PATTERN_OREDICTED);
+    }
 
     @Override
     public NBTTagCompound write(NBTTagCompound tag) {
@@ -22,6 +53,8 @@ public class TileProcessingPatternEncoder extends TileBase {
 
         writeItems(patterns, 0, tag);
         writeItems(configuration, 1, tag);
+
+        tag.setBoolean(NBT_PATTERN_OREDICTED, patternOredicted);
 
         return tag;
     }
@@ -32,11 +65,17 @@ public class TileProcessingPatternEncoder extends TileBase {
 
         readItems(patterns, 0, tag);
         readItems(configuration, 1, tag);
+
+        if(tag.hasKey(NBT_PATTERN_OREDICTED)){
+            patternOredicted = tag.getBoolean(NBT_PATTERN_OREDICTED);
+        }
     }
 
     public void onCreatePattern() {
         if (canCreatePattern()) {
             ItemStack pattern = new ItemStack(InfinityStorageItems.PATTERN);
+
+            ItemPattern.setOreDicted(pattern, patternOredicted);
 
             for (int i = 0; i < 18; ++i) {
                 if (configuration.getStackInSlot(i) != null) {

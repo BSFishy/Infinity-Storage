@@ -1,26 +1,32 @@
 package infinitystorage.gui;
 
+import infinitystorage.tile.data.TileDataManager;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.init.SoundEvents;
 import infinitystorage.InfinityStorage;
 import infinitystorage.container.ContainerProcessingPatternEncoder;
 import infinitystorage.network.MessageGridPatternCreate;
 import infinitystorage.network.MessageProcessingPatternEncoderClear;
 import infinitystorage.tile.TileProcessingPatternEncoder;
+import net.minecraftforge.fml.client.config.GuiCheckBox;
 
 import java.io.IOException;
 
 public class GuiProcessingPatternEncoder extends GuiBase {
     private TileProcessingPatternEncoder processingPatternEncoder;
 
+    private GuiCheckBox patternOredicted;
+
     public GuiProcessingPatternEncoder(ContainerProcessingPatternEncoder container, TileProcessingPatternEncoder processingPatternEncoder) {
-        super(container, 176, 172);
+        super(container, 176, 184);
 
         this.processingPatternEncoder = processingPatternEncoder;
     }
 
     @Override
     public void init(int x, int y) {
+        patternOredicted = addCheckBox(x + 7, y + 76, t("misc.infinitystorage:use_oredict"), TileProcessingPatternEncoder.PATTERN_OREDICTED.getValue());
     }
 
     @Override
@@ -57,7 +63,7 @@ public class GuiProcessingPatternEncoder extends GuiBase {
     @Override
     public void drawForeground(int mouseX, int mouseY) {
         drawString(7, 7, t("gui.infinitystorage:processing_pattern_encoder"));
-        drawString(7, 78, t("container.inventory"));
+        drawString(7, 91, t("container.inventory"));
 
         if (isOverCreatePattern(mouseX, mouseY)) {
             drawTooltip(mouseX, mouseY, t("gui.infinitystorage:processing_pattern_encoder.pattern_create"));
@@ -80,6 +86,21 @@ public class GuiProcessingPatternEncoder extends GuiBase {
             InfinityStorage.INSTANCE.network.sendToServer(new MessageProcessingPatternEncoderClear(processingPatternEncoder));
 
             mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        }
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException{
+        super.actionPerformed(button);
+
+        if(button == patternOredicted) {
+            TileDataManager.setParameter(TileProcessingPatternEncoder.PATTERN_OREDICTED, patternOredicted.isChecked());
+        }
+    }
+
+    public void updatePatternOredicted(boolean oredicted){
+        if(patternOredicted != null){
+            patternOredicted.setIsChecked(oredicted);
         }
     }
 }

@@ -15,7 +15,7 @@ public class SideButtonIOMode extends SideButton {
 
     @Override
     public String getTooltip(GuiBase gui) {
-        return TextFormatting.GREEN + gui.t("sidebutton.refinedstorage:iomode") + TextFormatting.RESET + "\n" + gui.t("sidebutton.refinedstorage:iomode." + (parameter.getValue() == TileDiskManipulator.INSERT ? "insert" : "extract"));
+        return TextFormatting.GREEN + gui.t("sidebutton.infinitystorage:iomode") + TextFormatting.RESET + "\n" + gui.t("sidebutton.infinitystorage:iomode." + (parameter.getValue() == TileDiskManipulator.INSERT ? "insert" : "extract"));
     }
 
     @Override

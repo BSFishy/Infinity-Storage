@@ -70,7 +70,12 @@ public class ChannelReloadThread extends Thread implements IChannelReloadThread 
             adjacentBlocks.add(worldObj.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)));
             adjacentBlocks.add(worldObj.getTileEntity(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)));
 
-            adjacentBlocks.stream().filter(tile -> !ignore.contains(tile)).forEach(tile -> processNode(tile, true));
+            adjacentBlocks.stream().filter(tile -> !ignore.contains(tile)).forEach(tile -> {
+                TileNode node = processNode(tile, true);
+                if(node instanceof TileCable){
+                    newCables.add((TileCable) node);
+                }
+            });
         }
         long sleepTime = 1000 / InfinityStorage.channelTimeUpdate;
         if(InfinityStorage.channelWaitTimeEnabled) {
@@ -183,12 +188,13 @@ public class ChannelReloadThread extends Thread implements IChannelReloadThread 
             return (TileCable) tile;
         }else if (tile instanceof TileNetworkTransmitter) {
             ignore.add(tile);
-            if (channelsUsed <= InfinityStorage.maxChannels) {
+            if (channelsUsed < InfinityStorage.maxChannels) {
                 channelsUsed++;
-                if(add)
-                    connected.add((TileNode) tile);
-                ((TileNode) tile).onConnected(network);
                 if(((TileNetworkTransmitter) tile).canTransmit()) {
+                    if(add)
+                        connected.add((TileNode) tile);
+                    ((TileNode) tile).onConnected(network);
+
                     //reloadAtPosition(((TileNetworkTransmitter) tile).getReceiver());
                     crt = new ChannelReloadThread(worldObj, false);
                     crt.setupAtPosition(((TileNetworkTransmitter) tile).getReceiver(), network);
