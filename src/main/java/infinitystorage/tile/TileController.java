@@ -31,6 +31,7 @@ import infinitystorage.block.BlockController;
 import infinitystorage.block.EnumControllerType;
 import infinitystorage.block.EnumGridType;
 import infinitystorage.container.ContainerGrid;
+import infinitystorage.integration.forgeenergy.ControllerEnergyForge;
 import infinitystorage.integration.ic2.ControllerEnergyIC2;
 import infinitystorage.integration.ic2.ControllerEnergyIC2None;
 import infinitystorage.integration.ic2.IControllerEnergyIC2;
@@ -63,7 +64,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -104,9 +107,9 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
                     IBlockState state = tile.worldObj.getBlockState(node.getPosition());
 
                     ClientNode clientNode = new ClientNode(
-                        new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state)),
-                        1,
-                        node.getEnergyUsage()
+                            new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state)),
+                            1,
+                            node.getEnergyUsage()
                     );
 
                     if (clientNode.getStack().getItem() != null) {
@@ -187,6 +190,7 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     private List<NBTTagCompound> craftingTasksToRead = new ArrayList<>();
 
     private EnergyStorage energy = new EnergyStorage(InfinityStorage.INSTANCE.controllerCapacity);
+    private ControllerEnergyForge energyForge = new ControllerEnergyForge(this);
     private IControllerEnergyIC2 energyEU;
     private ControllerEnergyTesla energyTesla;
 
@@ -289,7 +293,7 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
                 while (craftingTaskIterator.hasNext()) {
                     ICraftingTask task = craftingTaskIterator.next();
 
-                    if(updateCraftingTask(task)){
+                    if (updateCraftingTask(task)) {
                         craftingTaskIterator.remove();
                         craftingTasksChanged = true;
                     }
@@ -331,8 +335,8 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     }
 
     private boolean updateCraftingTask(ICraftingTask task) {
-        if(task.getChild() != null){
-            if(updateCraftingTask(task.getChild())){
+        if (task.getChild() != null) {
+            if (updateCraftingTask(task.getChild())) {
                 task.setChild(null);
             }
 
@@ -482,8 +486,8 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     @Override
     public void sendItemStorageToClient() {
         worldObj.getMinecraftServer().getPlayerList().getPlayerList().stream()
-            .filter(player -> isWatchingGrid(player, EnumGridType.NORMAL, EnumGridType.CRAFTING, EnumGridType.PATTERN))
-            .forEach(this::sendItemStorageToClient);
+                .filter(player -> isWatchingGrid(player, EnumGridType.NORMAL, EnumGridType.CRAFTING, EnumGridType.PATTERN))
+                .forEach(this::sendItemStorageToClient);
     }
 
     @Override
@@ -494,15 +498,15 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     @Override
     public void sendItemStorageDeltaToClient(ItemStack stack, int delta) {
         worldObj.getMinecraftServer().getPlayerList().getPlayerList().stream()
-            .filter(player -> isWatchingGrid(player, EnumGridType.NORMAL, EnumGridType.CRAFTING, EnumGridType.PATTERN))
-            .forEach(player -> InfinityStorage.INSTANCE.network.sendTo(new MessageGridItemDelta(this, stack, delta), player));
+                .filter(player -> isWatchingGrid(player, EnumGridType.NORMAL, EnumGridType.CRAFTING, EnumGridType.PATTERN))
+                .forEach(player -> InfinityStorage.INSTANCE.network.sendTo(new MessageGridItemDelta(this, stack, delta), player));
     }
 
     @Override
     public void sendFluidStorageToClient() {
         worldObj.getMinecraftServer().getPlayerList().getPlayerList().stream()
-            .filter(player -> isWatchingGrid(player, EnumGridType.FLUID))
-            .forEach(this::sendFluidStorageToClient);
+                .filter(player -> isWatchingGrid(player, EnumGridType.FLUID))
+                .forEach(this::sendFluidStorageToClient);
     }
 
     @Override
@@ -513,8 +517,8 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     @Override
     public void sendFluidStorageDeltaToClient(FluidStack stack, int delta) {
         worldObj.getMinecraftServer().getPlayerList().getPlayerList().stream()
-            .filter(player -> isWatchingGrid(player, EnumGridType.FLUID))
-            .forEach(player -> InfinityStorage.INSTANCE.network.sendTo(new MessageGridFluidDelta(stack, delta), player));
+                .filter(player -> isWatchingGrid(player, EnumGridType.FLUID))
+                .forEach(player -> InfinityStorage.INSTANCE.network.sendTo(new MessageGridFluidDelta(stack, delta), player));
     }
 
     private boolean isWatchingGrid(EntityPlayer player, EnumGridType... types) {
@@ -560,7 +564,7 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
 
             for (int i = 0; i < inserted; ++i) {
                 for (ICraftingTask task : craftingTasks) {
-                    if(inserted == 0){
+                    if (inserted == 0) {
                         break;
                     }
 
@@ -575,7 +579,7 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     }
 
     private boolean checkProcessing(ItemStack stack, ICraftingTask task) {
-        if(task.getChild() != null){
+        if (task.getChild() != null) {
             return checkProcessing(stack, task.getChild());
         }
 
@@ -695,11 +699,6 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     }
 
     @Override
-    public boolean shouldConnect(int pipe) {
-        return channelData.shouldConnect(pipe);
-    }
-
-    @Override
     public void addConnections(int input) {
         CONNECTIONS = ((CONNECTIONS + input > InfinityStorage.maxChannels) ? InfinityStorage.maxChannels : CONNECTIONS + input);
     }
@@ -722,33 +721,6 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
     @Override
     public void removeConnection(TileNode node) {
         CONNECTION.remove(CONNECTION.indexOf(node));
-    }
-
-    @Override
-    public void addNodeToQueue(TileNode node, boolean add){
-        if(add){
-            TILE_NODES.add(node);
-        }else{
-            TILE_NODES.remove(TILE_NODES.indexOf(node));
-        }
-    }
-
-    @Override
-    public void connectQueue(){
-        if(!TILE_NODES.isEmpty() && CONNECTIONS < 8){
-            while(CONNECTIONS < 8){
-                for(TileNode node : TILE_NODES){
-                    node.onConnected(this);
-                    addNodeToQueue(node, false);
-                    break;
-                }
-            }
-        }
-    }
-
-    @Override
-    public boolean inQueue(TileNode node){
-        return TILE_NODES.contains(node);
     }
 
     @Override
@@ -890,6 +862,10 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY){
+            return (T) energyForge;
+        }
+
         if (energyTesla != null && (capability == TeslaCapabilities.CAPABILITY_HOLDER || capability == TeslaCapabilities.CAPABILITY_CONSUMER)) {
             return (T) energyTesla;
         }
@@ -899,23 +875,20 @@ public class TileController extends TileBase implements INetworkMaster, IEnergyR
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return (energyTesla != null && (capability == TeslaCapabilities.CAPABILITY_HOLDER || capability == TeslaCapabilities.CAPABILITY_CONSUMER)) || super.hasCapability(capability, facing);
+        return capability == CapabilityEnergy.ENERGY
+
+                || (energyTesla != null && (capability == TeslaCapabilities.CAPABILITY_HOLDER || capability == TeslaCapabilities.CAPABILITY_CONSUMER))
+                || super.hasCapability(capability, facing);
     }
 
-    @Override
-    public void updateChannels(){
-        channelDataInit();
-        channelData.updateChannels();
-    }
-
-    public void channelDataInit(){
-        if(channelData == null){
+    public void channelDataInit() {
+        if (channelData == null) {
             channelData = new ChannelData(this);
         }
     }
 
     @Override
-    public void reloadCables(EntityPlayer player){
+    public void reloadCables(EntityPlayer player) {
         channelDataInit();
         channelData.reloadCables(player);
     }

@@ -23,6 +23,8 @@ public abstract class AChannelData implements IChannelData {
     public World worldObj;
     public int channelsUsed = 0;
 
+    public ChannelReloadThread crt;
+
     public AChannelData(INetworkMaster network){
         this.network = network;
         this.worldObj = network.getNetworkWorld();
@@ -37,18 +39,8 @@ public abstract class AChannelData implements IChannelData {
         }
     }
 
-    /**
-     * Updates all of the channels, pipes, and machines
-     * @param pipe The cable number to start at
-     */
-    public abstract void updateChannels(int pipe);
-
-    public void updateChannels(){
-        updateChannels(1);
-    }
-
     @Override
     public int channelsUsed(){
-        return channelsUsed;
+        return crt.getChannelsUsed();
     }
 }

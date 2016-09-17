@@ -1,5 +1,6 @@
 package infinitystorage.apiimpl.solderer;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import infinitystorage.InfinityStorageItems;
 import infinitystorage.api.solderer.ISoldererRecipe;
@@ -14,7 +15,7 @@ public class SoldererRecipeUpgrade implements ISoldererRecipe {
         this.rows = new ItemStack[]{
             ItemUpgrade.getRequirement(type),
             new ItemStack(InfinityStorageItems.UPGRADE, 1, 0),
-            ItemUpgrade.getRequirement(type)
+            new ItemStack(Items.REDSTONE)
         };
     }
 

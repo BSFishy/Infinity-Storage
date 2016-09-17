@@ -6,6 +6,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class InfinityConfig {
 
     public static boolean channelsEnabled;
+    public static boolean channelWaitTimeEnabled;
+    public static boolean requireNetworkToolToReload;
     public static int maxChannels;
     public static int channelTimeUpdate;
 
@@ -59,8 +61,10 @@ public class InfinityConfig {
 
     public static void reloadConfig(Configuration config) {
         channelsEnabled = config.getBoolean("channelsEnabled", "channels", true, "Do cables have a specific number of channels?");
+        channelWaitTimeEnabled = config.getBoolean("channelWaitTimeEnabled", "channels", true, "This disables the 'channelTimeUpdate', making the update quicker, without having to wait");
+        requireNetworkToolToReload = config.getBoolean("requireNetworkToolToReload", "channels", true, "If the Network Tool is required to reload the network. Will only work if channelWaitTimeEnable is set to true");
         maxChannels = config.getInt("maxChannels", "channels", 8,  1, Integer.MAX_VALUE, "The maximum amount of devices that can connect to a controller");
-        channelTimeUpdate = config.getInt("channelTimeUpdate", "channels", 2, 1, Integer.MAX_VALUE, "The amount of channels to update each second NOTE: The higher the number, the more lag it will cause.");;
+        channelTimeUpdate = config.getInt("channelTimeUpdate", "channels", 2, 1, Integer.MAX_VALUE, "The amount of channels to update each second");
 
         controllerBaseUsage = config.getInt("controllerBase", "energy", 0, 0, Integer.MAX_VALUE, "The base energy used by the Controller");
         cableUsage = config.getInt("cable", "energy", 0, 0, Integer.MAX_VALUE, "The energy used by Cables");

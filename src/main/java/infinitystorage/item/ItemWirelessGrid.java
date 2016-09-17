@@ -3,6 +3,7 @@ package infinitystorage.item;
 import cofh.api.energy.ItemEnergyContainer;
 import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
+import infinitystorage.integration.forgeenergy.WirelessGridEnergyForge;
 import net.darkhax.tesla.capability.TeslaCapabilities;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
@@ -20,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import infinitystorage.InfinityStorage;
 import infinitystorage.InfinityStorageBlocks;
@@ -293,13 +295,19 @@ public class ItemWirelessGrid extends ItemEnergyContainer implements ISpecialEle
 
         @Override
         public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-            return IntegrationTesla.isLoaded() && (capability == TeslaCapabilities.CAPABILITY_HOLDER || capability == TeslaCapabilities.CAPABILITY_CONSUMER);
+            return capability == CapabilityEnergy.ENERGY ||
+
+                    (IntegrationTesla.isLoaded() && (capability == TeslaCapabilities.CAPABILITY_HOLDER || capability == TeslaCapabilities.CAPABILITY_CONSUMER));
         }
 
         @Override
         public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+            if (capability == CapabilityEnergy.ENERGY){
+                return (T) new WirelessGridEnergyForge(stack);
+            }
+
             if (IntegrationTesla.isLoaded() && (capability == TeslaCapabilities.CAPABILITY_HOLDER || capability == TeslaCapabilities.CAPABILITY_CONSUMER)) {
-                return (T) new WirelessGridEnergyTesla(ItemWirelessGrid.this, stack);
+                return (T) new WirelessGridEnergyTesla(stack);
             }
 
             return null;

@@ -10,6 +10,9 @@ import infinitystorage.api.InfinityStorageAPI;
 import infinitystorage.api.autocrafting.ICraftingPattern;
 import infinitystorage.api.autocrafting.task.ICraftingTask;
 import infinitystorage.api.storage.CompareUtils;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.List;
 
 /**
  * Utilities for network manipulation.
@@ -17,6 +20,29 @@ import infinitystorage.api.storage.CompareUtils;
 public final class NetworkUtils {
     public static ItemStack extractItem(INetworkMaster network, ItemStack stack, int size) {
         return network.extractItem(stack, size, CompareUtils.COMPARE_DAMAGE | CompareUtils.COMPARE_NBT);
+    }
+
+    public static ItemStack extractItemOreDict(INetworkMaster network, ItemStack stack, int size) {
+        int ids[] = OreDictionary.getOreIDs(stack);
+        String names[] = new String[ids.length];
+
+        for (int i = 0; i < ids.length; ++i) {
+            names[i] = OreDictionary.getOreName(ids[i]);
+        }
+
+        for (String name : names) {
+            List<ItemStack> possibilities = OreDictionary.getOres(name);
+
+            for (ItemStack possibility : possibilities) {
+                ItemStack result = network.extractItem(possibility, size, 0);
+
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+
+        return null;
     }
 
     public static FluidStack extractFluid(INetworkMaster network, FluidStack stack, int size) {

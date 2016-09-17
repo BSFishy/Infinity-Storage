@@ -1,5 +1,6 @@
 package infinitystorage.apiimpl.storage.fluid;
 
+import infinitystorage.api.storage.CompareUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -39,8 +40,8 @@ public final class FluidUtils {
         return stack.getFluid() == FluidRegistry.WATER || stack.getFluid() == FluidRegistry.LAVA || FluidRegistry.getBucketFluids().contains(stack.getFluid());
     }
 
-    public static ItemStack extractItemOrIfBucketLookInFluids(INetworkMaster network, ItemStack stack, int size) {
-        ItemStack result = NetworkUtils.extractItem(network, stack, size);
+    public static ItemStack extractItemOrIfBucketLookInFluids(INetworkMaster network, ItemStack stack, int size, boolean oredict) {
+        ItemStack result = oredict ? NetworkUtils.extractItemOreDict(network, stack, size) : NetworkUtils.extractItem(network, stack, size);
 
         if (result == null && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
             FluidStack fluidStack = getFluidFromStack(stack, true);
@@ -51,11 +52,7 @@ public final class FluidUtils {
                 if (result != null) {
                     result.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(NetworkUtils.extractFluid(network, fluidStack, Fluid.BUCKET_VOLUME), true);
                 } else {
-                    ICraftingPattern pattern = NetworkUtils.getPattern(network, EMPTY_BUCKET);
-
-                    if (pattern != null) {
-                        network.addCraftingTask(NetworkUtils.createCraftingTask(network, pattern));
-                    }
+                    NetworkUtils.scheduleCraftingTaskIfUnscheduled(network, EMPTY_BUCKET, 1, CompareUtils.COMPARE_DAMAGE | CompareUtils.COMPARE_NBT);
                 }
             }
         }

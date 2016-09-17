@@ -211,13 +211,6 @@ public interface INetworkMaster {
     World getNetworkWorld();
 
     /**
-     * Checks if a machine should connect to the network at a certain pipe
-     * @param pipe The pipe to check if it should connect
-     * @return Whether or not another machine can connect
-     */
-    boolean shouldConnect(int pipe);
-
-    /**
      * @param input The amount of connections to add
      */
     void addConnections(int input);
@@ -242,27 +235,6 @@ public interface INetworkMaster {
      * @param node The tile node to remove from the connection list
      */
     void removeConnection(TileNode node);
-
-    /**
-     * @param node The node to add to the queue
-     */
-    void addNodeToQueue(TileNode node, boolean add);
-
-    /**
-     * @param node The node to try and find
-     * @return Whether or not the node is in the queue
-     */
-    boolean inQueue(TileNode node);
-
-    /**
-     * If there are any nodes in the queue, start connecting them until there are no more channels
-     */
-    void connectQueue();
-
-    /**
-     * This will update the channels
-     */
-    void updateChannels();
 
     /**
      * Reloads all of the data concerning the cables connected to the controller

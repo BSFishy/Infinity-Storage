@@ -1,6 +1,5 @@
 package infinitystorage.proxy;
 
-import infinitystorage.InfinityConfig;
 import infinitystorage.integration.ingameConfig.IngameConfigEventHandler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -22,7 +21,6 @@ import infinitystorage.InfinityStorageItems;
 import infinitystorage.api.InfinityStorageAPI;
 import infinitystorage.apiimpl.autocrafting.registry.CraftingTaskFactoryNormal;
 import infinitystorage.apiimpl.autocrafting.registry.CraftingTaskFactoryProcessing;
-import infinitystorage.apiimpl.autocrafting.registry.CraftingTaskRegistry;
 import infinitystorage.apiimpl.solderer.*;
 import infinitystorage.apiimpl.storage.fluid.FluidStorageNBT;
 import infinitystorage.apiimpl.storage.item.ItemStorageNBT;
@@ -41,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommonProxy {
+    public static final boolean ENABLE_DISK_MANIPULATOR = false;
+
     protected List<BlockCable> cableTypes = new ArrayList<>();
 
     public void preInit(FMLPreInitializationEvent e) {
@@ -98,7 +98,9 @@ public class CommonProxy {
         registerTile(TileNetworkTransmitter.class, "network_transmitter");
         registerTile(TileFluidInterface.class, "fluid_interface");
         registerTile(TileFluidStorage.class, "fluid_storage");
-        //registerTile(TileDiskManipulator.class, "disk_manipulator");
+        if(ENABLE_DISK_MANIPULATOR) {
+            registerTile(TileDiskManipulator.class, "disk_manipulator");
+        }
 
         registerBlock(InfinityStorageBlocks.CONTROLLER);
         registerBlock(InfinityStorageBlocks.GRID);
@@ -123,7 +125,9 @@ public class CommonProxy {
         registerBlock(InfinityStorageBlocks.MACHINE_CASING);
         registerBlock(InfinityStorageBlocks.NETWORK_TRANSMITTER);
         registerBlock(InfinityStorageBlocks.NETWORK_RECEIVER);
-        //registerBlock(InfinityStorageBlocks.DISK_MANIPULATOR);
+        if(ENABLE_DISK_MANIPULATOR) {
+            registerBlock(InfinityStorageBlocks.DISK_MANIPULATOR);
+        }
 
         registerItem(InfinityStorageItems.QUARTZ_ENRICHED_IRON);
         registerItem(InfinityStorageItems.STORAGE_DISK);
@@ -213,7 +217,7 @@ public class CommonProxy {
         );
 
         // Disk Drive
-        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipe(
             new ItemStack(InfinityStorageBlocks.DISK_DRIVE),
             500,
             new ItemStack(InfinityStorageItems.PROCESSOR, 1, ItemProcessor.TYPE_ADVANCED),
@@ -255,7 +259,7 @@ public class CommonProxy {
         );
 
         // Crafting Grid
-        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipe(
             new ItemStack(InfinityStorageBlocks.GRID, 1, EnumGridType.CRAFTING.getId()),
             500,
             new ItemStack(InfinityStorageItems.PROCESSOR, 1, ItemProcessor.TYPE_ADVANCED),
@@ -264,7 +268,7 @@ public class CommonProxy {
         ));
 
         // Pattern Grid
-        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipe(
             new ItemStack(InfinityStorageBlocks.GRID, 1, EnumGridType.PATTERN.getId()),
             500,
             new ItemStack(InfinityStorageItems.PROCESSOR, 1, ItemProcessor.TYPE_ADVANCED),
@@ -273,7 +277,7 @@ public class CommonProxy {
         ));
 
         // Fluid Grid
-        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipe(
             new ItemStack(InfinityStorageBlocks.GRID, 1, EnumGridType.FLUID.getId()),
             500,
             new ItemStack(InfinityStorageItems.PROCESSOR, 1, ItemProcessor.TYPE_ADVANCED),
@@ -567,7 +571,7 @@ public class CommonProxy {
         ));
 
         // Interface
-        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipe(
             new ItemStack(InfinityStorageBlocks.INTERFACE),
             200,
             new ItemStack(InfinityStorageBlocks.IMPORTER),
@@ -576,7 +580,7 @@ public class CommonProxy {
         ));
 
         // Fluid Interface
-        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipeBasic(
+        InfinityStorageAPI.instance().getSoldererRegistry().addRecipe(new SoldererRecipe(
             new ItemStack(InfinityStorageBlocks.FLUID_INTERFACE),
             200,
             new ItemStack(Items.BUCKET),

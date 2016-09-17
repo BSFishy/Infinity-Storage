@@ -10,6 +10,10 @@ import infinitystorage.api.network.INetworkMaster;
 import infinitystorage.api.network.NetworkUtils;
 import infinitystorage.api.network.grid.IItemGridHandler;
 import infinitystorage.api.storage.CompareUtils;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class ItemGridHandler implements IItemGridHandler {
 
@@ -61,8 +65,10 @@ public class ItemGridHandler implements IItemGridHandler {
 
         if (took != null) {
             if ((flags & EXTRACT_SHIFT) == EXTRACT_SHIFT) {
-                if (!player.inventory.addItemStackToInventory(took.copy())) {
-                    InventoryHelper.spawnItemStack(player.worldObj, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), took);
+                ItemStack remainder = ItemHandlerHelper.insertItem(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP), took, false);
+
+                if(remainder != null){
+                    network.insertItem(remainder, remainder.stackSize, false);
                 }
             } else {
                 if (single && held != null) {

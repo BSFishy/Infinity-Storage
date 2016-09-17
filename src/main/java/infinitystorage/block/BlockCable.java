@@ -255,6 +255,19 @@ public class BlockCable extends BlockCoverable {
         super.onBlockPlacedBy(world, pos, state, player, stack);
 
         if (getPlacementType() != null) {
+
+            if (!world.isRemote) {
+                for (EnumFacing fac : EnumFacing.VALUES) {
+                    TileEntity tile = world.getTileEntity(pos.offset(fac));
+
+                    if (tile instanceof TileNode && ((TileNode) tile).isConnected()) {
+                        NetworkUtils.rebuildGraph(((TileNode) tile).getNetwork());
+
+                        break;
+                    }
+                }
+            }
+
             ((TileBase) world.getTileEntity(pos)).setDirection(state.getValue(DIRECTION));
         }
 
@@ -297,11 +310,11 @@ public class BlockCable extends BlockCoverable {
             }
         }
 
-        super.breakBlock(world, pos, state);
-
         if (network != null) {
             NetworkUtils.rebuildGraph(network);
         }
+
+        super.breakBlock(world, pos, state);
     }
 
     @Override

@@ -1,12 +1,15 @@
 package infinitystorage.tile;
 
 import infinitystorage.InfinityStorageBlocks;
+import infinitystorage.apiimpl.storage.NBTStorage;
+import infinitystorage.inventory.IItemValidator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -86,34 +89,13 @@ public class TileDiskDrive extends TileNode implements IItemStorageProvider, IFl
     private static final String NBT_STORED = "Stored";
     private static final String NBT_TYPE = "Type";
 
-    private ItemHandlerBasic disks = new ItemHandlerBasic(8, this, new ItemValidatorBasic(InfinityStorageItems.STORAGE_DISK) {
-        @Override
-        public boolean isValid(ItemStack disk) {
-            return super.isValid(disk) && ItemStorageNBT.isValid(disk);
-        }
-    }, new ItemValidatorBasic(InfinityStorageItems.FLUID_STORAGE_DISK) {
-        @Override
-        public boolean isValid(ItemStack disk) {
-            return super.isValid(disk) && FluidStorageNBT.isValid(disk);
-        }
-    }) {
+    private ItemHandlerBasic disks = new ItemHandlerBasic(8, this, IItemValidator.STORAGE_DISK) {
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
 
             if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-                ItemStack disk = getStackInSlot(slot);
-
-                if (disk == null) {
-                    itemStorages[slot] = null;
-                    fluidStorages[slot] = null;
-                } else {
-                    if (disk.getItem() == InfinityStorageItems.STORAGE_DISK) {
-                        itemStorages[slot] = new ItemStorage(disk);
-                    } else if (disk.getItem() == InfinityStorageItems.FLUID_STORAGE_DISK) {
-                        fluidStorages[slot] = new FluidStorage(disk);
-                    }
-                }
+                NBTStorage.constructFromDrive(getStackInSlot(slot), slot, itemStorages, fluidStorages, s -> new ItemStorage(s), s -> new FluidStorage(s));
 
                 if (network != null) {
                     network.getItemStorage().rebuild();

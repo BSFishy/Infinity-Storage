@@ -1,5 +1,6 @@
 package infinitystorage.proxy;
 
+import infinitystorage.tile.TileController;
 import mcmultipart.client.multipart.ModelMultipartContainer;
 import mcmultipart.raytrace.PartMOP;
 import mcmultipart.raytrace.RayTraceUtils;
@@ -9,6 +10,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -246,17 +248,16 @@ public class ClientProxy extends CommonProxy {
 
         // Blocks
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.CABLE), 0, new ModelResourceLocation("infinitystorage:cable", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.GRID), EnumGridType.NORMAL.getId(), new ModelResourceLocation("infinitystorage:grid", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.GRID), EnumGridType.CRAFTING.getId(), new ModelResourceLocation("infinitystorage:grid", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.GRID), EnumGridType.PATTERN.getId(), new ModelResourceLocation("infinitystorage:grid", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.GRID), EnumGridType.FLUID.getId(), new ModelResourceLocation("infinitystorage:fluid_grid", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.GRID), EnumGridType.NORMAL.getId(), new ModelResourceLocation("infinitystorage:grid", "connected=false,direction=north,type=normal"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.GRID), EnumGridType.CRAFTING.getId(), new ModelResourceLocation("infinitystorage:grid", "connected=false,direction=north,type=crafting"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.GRID), EnumGridType.PATTERN.getId(), new ModelResourceLocation("infinitystorage:grid", "connected=false,direction=north,type=crafting"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.GRID), EnumGridType.FLUID.getId(), new ModelResourceLocation("infinitystorage:grid", "connected=false,direction=north,type=crafting"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.MACHINE_CASING), 0, new ModelResourceLocation("infinitystorage:machine_casing", "inventory"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.EXPORTER), 0, new ModelResourceLocation("infinitystorage:exporter", "inventory"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.IMPORTER), 0, new ModelResourceLocation("infinitystorage:importer", "inventory"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.EXTERNAL_STORAGE), 0, new ModelResourceLocation("infinitystorage:external_storage", "inventory"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.DISK_DRIVE), 0, new ModelResourceLocation("infinitystorage:disk_drive", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.CONTROLLER), EnumControllerType.NORMAL.getId(), new ModelResourceLocation("infinitystorage:controller", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.CONTROLLER), EnumControllerType.CREATIVE.getId(), new ModelResourceLocation("infinitystorage:creative_controller", "inventory"));
+
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.CONSTRUCTOR), 0, new ModelResourceLocation("infinitystorage:constructor", "inventory"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.DESTRUCTOR), 0, new ModelResourceLocation("infinitystorage:destructor", "inventory"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.SOLDERER), 0, new ModelResourceLocation("infinitystorage:solderer", "inventory"));
@@ -280,6 +281,16 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.FLUID_STORAGE), EnumFluidStorageType.TYPE_256K.getId(), new ModelResourceLocation("infinitystorage:fluid_storage", "type=256k"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.FLUID_STORAGE), EnumFluidStorageType.TYPE_512K.getId(), new ModelResourceLocation("infinitystorage:fluid_storage", "type=512k"));
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.FLUID_STORAGE), EnumFluidStorageType.TYPE_CREATIVE.getId(), new ModelResourceLocation("infinitystorage:fluid_storage", "type=creative"));
-        //ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.DISK_MANIPULATOR), 0, new ModelResourceLocation("infinitystorage:disk_manipulator", "inventory"));
+        if(ENABLE_DISK_MANIPULATOR) {
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(InfinityStorageBlocks.DISK_MANIPULATOR), 0, new ModelResourceLocation("infinitystorage:disk_manipulator", "inventory"));
+        }
+
+        ModelLoader.setCustomStateMapper(InfinityStorageBlocks.CONTROLLER, new StateMap.Builder().ignore(BlockController.TYPE).build());
+
+        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(InfinityStorageBlocks.CONTROLLER), stack -> {
+            int energy = stack.getItemDamage() == EnumControllerType.CREATIVE.getId() ? 7 : TileController.getEnergyScaled(ItemBlockController.getEnergyStored(stack), ItemBlockController.getEnergyCapacity(stack), 7);
+
+            return new ModelResourceLocation("infinitystorage:controller", "direction=north,energy=" + energy);
+        });
     }
 }

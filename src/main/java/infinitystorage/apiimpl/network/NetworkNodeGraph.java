@@ -14,6 +14,7 @@ import infinitystorage.api.network.INetworkNode;
 import infinitystorage.api.network.INetworkNodeGraph;
 import infinitystorage.tile.TileController;
 import infinitystorage.tile.TileNetworkTransmitter;
+import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.*;
 
@@ -131,6 +132,10 @@ public class NetworkNodeGraph implements INetworkNodeGraph {
                     changed = true;
                 }
             }
+        } else if (InfinityStorage.requireNetworkToolToReload) {
+            ChannelReloadThread crt = new ChannelReloadThread(world, false);
+            crt.setupAtPosition(controller.getPos(), controller);
+            crt.start();
         }
 
         if (changed) {

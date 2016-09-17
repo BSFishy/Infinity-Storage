@@ -1,5 +1,7 @@
 package infinitystorage.block;
 
+import infinitystorage.apiimpl.network.ChannelReloadThread;
+import infinitystorage.tile.TileNetworkTransmitter;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -85,5 +87,14 @@ public class BlockWirelessTransmitter extends BlockNode {
     @Override
     public EnumPlacementType getPlacementType() {
         return null;
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        TileNetworkTransmitter thisTile = (TileNetworkTransmitter) world.getTileEntity(pos);
+        ChannelReloadThread crt = new ChannelReloadThread(world, false);
+        crt.setupAtPosition(thisTile.getReceiver(), thisTile.getNetwork());
+        crt.start();
+        super.breakBlock(world, pos, state);
     }
 }

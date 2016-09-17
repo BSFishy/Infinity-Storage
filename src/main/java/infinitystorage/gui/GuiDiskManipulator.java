@@ -2,10 +2,7 @@ package infinitystorage.gui;
 
 import infinitystorage.api.storage.CompareUtils;
 import infinitystorage.container.ContainerDiskManipulator;
-import infinitystorage.gui.sidebutton.SideButtonCompare;
-import infinitystorage.gui.sidebutton.SideButtonMode;
-import infinitystorage.gui.sidebutton.SideButtonRedstoneMode;
-import infinitystorage.gui.sidebutton.SideButtonType;
+import infinitystorage.gui.sidebutton.*;
 import infinitystorage.tile.TileDiskManipulator;
 
 public class GuiDiskManipulator extends GuiBase {
@@ -16,6 +13,7 @@ public class GuiDiskManipulator extends GuiBase {
     @Override
     public void init(int x, int y) {
         addSideButton(new SideButtonRedstoneMode(TileDiskManipulator.REDSTONE_MODE));
+        addSideButton(new SideButtonIOMode(TileDiskManipulator.IO_MODE));
         addSideButton(new SideButtonType(TileDiskManipulator.TYPE));
         addSideButton(new SideButtonMode(TileDiskManipulator.MODE));
         addSideButton(new SideButtonCompare(TileDiskManipulator.COMPARE, CompareUtils.COMPARE_DAMAGE));

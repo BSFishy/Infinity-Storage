@@ -99,6 +99,10 @@ sidebutton.infinitystorage:mode=Mode
 sidebutton.infinitystorage:mode.whitelist=Whitelist
 sidebutton.infinitystorage:mode.blacklist=Blacklist
 
+sidebutton.infinitystorage:iomode=IOMode
+sidebutton.infinitystorage:iomode.insert=Insert into network
+sidebutton.infinitystorage:iomode.extract=Extract from network
+
 sidebutton.infinitystorage:type=Type
 sidebutton.infinitystorage:type.0=Items
 sidebutton.infinitystorage:type.1=Fluids
