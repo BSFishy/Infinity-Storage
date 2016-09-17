@@ -4,4 +4,4 @@ Infinity Storage is a fork of Refined Storage, to bring back a couple of key fea
 
  [ci-image]: https://travis-ci.org/LousyLynx/Infinity-Storage.svg "Travis-ci image"
  [bintray-image]: https://api.bintray.com/packages/lousylynx/dev/infinity-storage/images/download.svg "Download"
- [curseforge-image]: http://cf.way2muchnoise.eu/infinity-storage.svg "Official Download"
+ [curseforge-image]: http://cf.way2muchnoise.eu/250910.svg "Official Download"
